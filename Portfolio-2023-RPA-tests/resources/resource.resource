@@ -1,9 +1,10 @@
 *** Settings ***
 Library           SeleniumLibrary
 
-*** Test Cases ***
-homepage-button
-    browser_opening
+*** Variables ***
+${logo}           xpath: //img[@alt="home"]
+${first_slide}    xpath://img[@alt="slideshow-0"]
+
 
 *** Keywords ***
 browser_opening
