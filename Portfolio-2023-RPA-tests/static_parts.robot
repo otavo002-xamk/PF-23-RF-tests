@@ -3,12 +3,8 @@ Library           SeleniumLibrary
 Resource          resources/resource.resource
 
 *** Variables ***
-
-
-
-
-
-
+${toggle-to-dark}    xpath: //img[@alt="moon"]
+${toggle-to-light}    xpath: //img[@alt="sun"]
 
 *** Test Cases ***
 homepage-button
@@ -20,6 +16,13 @@ homepage-button
     Click Image    ${logo}
     frontpage_opening
 
+theme-toggler
+    browser_opening
+    Element Attribute Value Should Be    tag:body    class    \
+    Click Image    ${toggle-to-dark}
+    Element Attribute Value Should Be    tag:body    class    dark
+    Click Image    ${toggle-to-light}
+    Element Attribute Value Should Be    tag:body    class    \
 
 *** Keywords ***
 frontpage_opening
