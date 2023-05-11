@@ -15,6 +15,7 @@ homepage-button
     Element Should Not Be Visible    ${first_slide}
     Click Image    ${logo}
     frontpage_opening
+    Close Browser
 
 theme-toggler
     browser_opening
@@ -23,6 +24,13 @@ theme-toggler
     Element Attribute Value Should Be    tag:body    class    dark
     Click Image    ${toggle-to-light}
     Element Attribute Value Should Be    tag:body    class    \
+    Close Browser
+
+language-toggler
+    browser_opening
+    Element Should Be Visible    ${english-flag}
+    Element Should Not Be Visible    ${finnish-flag}
+    select_other_language    "fi"
 
 *** Keywords ***
 frontpage_opening
