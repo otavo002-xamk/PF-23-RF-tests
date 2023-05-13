@@ -4,12 +4,13 @@ Library           SeleniumLibrary
 *** Variables ***
 ${logo}           xpath: //img[@alt="home"]
 ${first_slide}    xpath://img[@alt="slideshow-0"]
-${sample3_title}    xpath: //*[contains(text(), "Sample 3!")]
+${sample3_title}    xpath: //h1[contains(text(), "Sample 3!")]
 ${english-flag}    xpath: //img[@alt="en"]
 ${finnish-flag}    xpath: //img[@alt="fi"]
 ${dropdown-icon}    class:css-tj5bde-Svg    # language-toggler's dropdown-icon
 ${eng-flag-dropdown-item}    xpath: //img[@data-testid="english-flag"]
 ${fin-flag-dropdown-item}    xpath: //img[@data-testid="finnish-flag"]
+
 
 
 *** Keywords ***
