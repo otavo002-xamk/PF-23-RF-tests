@@ -10,9 +10,7 @@ ${finnish-flag}    xpath: //img[@alt="fi"]
 ${dropdown-icon}    class:css-tj5bde-Svg    # language-toggler's dropdown-icon
 ${eng-flag-dropdown-item}    xpath: //img[@data-testid="english-flag"]
 ${fin-flag-dropdown-item}    xpath: //img[@data-testid="finnish-flag"]
-
-
-
+${central_content-div}    xpath: //div[@class="p-12 lg:p-0"]
 
 *** Keywords ***
 browser_opening
