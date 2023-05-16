@@ -3,12 +3,15 @@ Library           SeleniumLibrary
 Resource          resources/resource.resource
 
 *** Variables ***
-${math-game-title}    xpath: //h1[contains(text(), "Math Game!")]
-${ready?}         xpath: //p[contains(text(), "Ready?")]
-${start-button}    xpath: //button[contains(text(), "Start!")]
-${start-over-button}    xpath: //button[contains(text(), "Start over.")]
-${valmis?}        xpath: //p[contains(text(), "Oletko valmis?")]
-${matikkapeli-title}    xpath: //h1[contains(text(), "Matikkapeli!")]
+${math-game-title}    xpath: //h1[text()="Math Game!"]
+${ready?}         xpath: //p[text()="Ready?"]
+${start-button}    xpath: //button[text()="Start!"]
+${start-over-button}    xpath: //button[text()="Start over."]
+${valmis?}        xpath: //p[text()="Oletko valmis?"]
+${matikkapeli-title}    xpath: //h1[text()="Matikkapeli!"]
+
+
+
 
 *** Test Cases ***
 checking_components
@@ -32,11 +35,15 @@ checking_components
     Element Should Be Visible    ${start-over-button}
     Element Should Be Disabled    xpath: //button[contains(text(), "NEXT ❯")]
     Element Should Not Be Visible    xpath: //p[contains(text(), "Correct!")]
-    choose_correct    0
-    Element Should Be Visible    xpath: //p[contains(text(), "Correct!")]
-    Click Element    xpath: //button[contains(text(), "NEXT ❯")]
-
-
+    ${sum}    choose_correct    0
+    Click Element    xpath: //td[text()="${sum}"]
+    ${correct-count}    Get Element Count    xpath: //td[text()="${sum}"]
+    Element Should Be Visible    xpath: //td[text()="${sum}"][1]//img[@alt="correct"]
+    Element Should Not Be Visible    xpath: //td[text()="${sum}"][1]//preceding::td//img[@alt="correct"]
+    Element Should Not Be Visible    xpath: //td[text()="${sum}"][${correct-count}]//following-sibling::td//img[@alt="correct"]
+    Element Should Not Be Visible    xpath: //img[@alt="incorrect"]
+    Element Should Be Visible    xpath: //p[text()="Correct!"]
+    Click Element    xpath: //button[text()="NEXT ❯"]
 
 *** Keywords ***
 choose_correct
@@ -45,4 +52,11 @@ choose_correct
     ${random2}    Get Text    xpath: //div[@data-testid="random-number-${equation-number}-1"]
     ${random3}    Get Text    xpath: //div[@data-testid="random-number-${equation-number}-2"]
     ${sum}    evaluate    ${random1}+${random2}+${random3}
-    Click Element    xpath: //td[contains(text(), "${sum}")]
+
+
+
+
+
+
+
+    [Return]    ${sum}
