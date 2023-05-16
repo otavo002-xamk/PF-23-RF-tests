@@ -8,13 +8,13 @@ ${ready?}         ${central_content-div}//p[text()="Ready?" or text()="Oletko va
 ${start-button}    xpath: //button[text()="Start!" or text()="Aloita!"]
 ${start-over-button}    xpath: //button[text()="Start over." or text()="Aloita alusta."]
 ${status}         ${central_content-div}//p[contains(text(), "Time left") or contains(text(), "Aikaa jäljellä")]
-${progress-bar}    ${central_content-div}//div[@class="progressbar-progress"]
 ${result}         ${central_content-div}//p[text()="Time ended!" or text()="Correct!" or text()="Wrong!" or text()="Aika loppui!" or text()="Oikein!" or text()="Väärin!"]
 ${options-table-0}    xpath: //tbody[@data-testid="equation-options-table-tb-0"]
 ${options-table-1}    xpath: //tbody[@data-testid="equation-options-table-tb-1"]
 ${options-table-2}    xpath: //tbody[@data-testid="equation-options-table-tb-2"]
 ${options-table-3}    xpath: //tbody[@data-testid="equation-options-table-tb-3"]
 ${options-table-4}    xpath: //tbody[@data-testid="equation-options-table-tb-4"]
+
 
 
 
@@ -33,29 +33,16 @@ checking_components
     Element Should Not Be Visible    ${start-over-button}
     check_equation-number-elements    6
     Element Should Not Be Visible    ${status}
-    Element Should Not Be Visible    ${progress-bar}
+    Element Should Not Be Visible    ${central_content-div}//div[@class="progressbar-progress"]
     Click Button    ${start-button}
-    Element Should Be Visible    ${math-game-title}
-    Element Should Not Be Visible    ${ready?}
-    Element Text Should Be    ${start-over-button}    Start over.
-    Element Should Contain    ${status}    Time left
-    select_other_language    'fi'
-    Element Text Should Be    ${start-over-button}    Aloita alusta.
-    Element Should Contain    ${status}    Aikaa jäljellä
-    select_other_language    'en'
-    Element Text Should Be    ${start-over-button}    Start over.
-    Element Should Contain    ${status}    Time left
-    check_equation-number-elements    0
-    Element Should Be Visible    ${progress-bar}
-    Element Should Not Be Visible    ${result}
-    Element Should Be Disabled    xpath: //button[contains(text(), "NEXT ❯")]
+    check_elements_after_start    0
     ${sum}    calculate_sum    0
     Click Element    xpath: //td[text()="${sum}"]
     ${correct-count}    Get Element Count    xpath: //td[text()="${sum}"]
-    Element Should Be Visible    xpath: //td[text()="${sum}"][1]//img[@alt="correct"]
-    Element Should Not Be Visible    xpath: //td[text()="${sum}"][1]//preceding::td//img[@alt="correct"]
-    Element Should Not Be Visible    xpath: //td[text()="${sum}"][${correct-count}]//following-sibling::td//img[@alt="correct"]
-    Element Should Not Be Visible    xpath: //img[@alt="incorrect"]
+    Element Should Be Visible    xpath: //tbody[@data-testid="equation-options-table-tb-0"]//td[text()="${sum}"][1]//img[@alt="correct"]
+    Element Should Not Be Visible    xpath: //tbody[@data-testid="equation-options-table-tb-0"]//td[text()="${sum}"][1]//preceding::td//img[@alt="correct"]
+    Element Should Not Be Visible    xpath: //tbody[@data-testid="equation-options-table-tb-0"]//td[text()="${sum}"][${correct-count}]//following-sibling::td//img[@alt="correct"]
+    Element Should Not Be Visible    xpath: //tbody[@data-testid="equation-options-table-tb-0"]//img[@alt="incorrect"]
     Element Should Not Be Visible    ${status}
     Element Text Should Be    ${result}    Correct!
     select_other_language    'fi'
@@ -63,6 +50,22 @@ checking_components
     select_other_language    'en'
     Element Text Should Be    ${result}    Correct!
     Click Element    xpath: //button[text()="NEXT ❯"]
+    check_elements_after_start    1
+    ${sum1}    calculate_sum    1
+    ${correct-count1}    Get Element Count    xpath: //td[text()="${sum1}"]
+    ${first-option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-0"]
+    ${second-option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-1"]
+    ${third-option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-2"]
+    ${fourth-option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-3"]
+    IF    ${first-option} != ${sum1}
+        Click Element    xpath: //td[@data-testid="equation-options-table-td-1-0"]
+    ELSE IF    ${second-option} != ${sum1}
+        Click Element    xpath: //td[@data-testid="equation-options-table-td-1-1"]
+    ELSE IF    ${third-option} != ${sum1}
+        Click Element    xpath: //td[@data-testid="equation-options-table-td-1-2"]
+    ELSE IF    ${fourth-option} != ${sum1}
+        Click Element    xpath: //td[@data-testid="equation-options-table-td-1-3"]
+    END
 
 *** Keywords ***
 calculate_sum
@@ -111,3 +114,20 @@ check_equation-number-elements
             END
         END
     END
+
+check_elements_after_start
+    [Arguments]    ${equation-number}
+    Element Should Be Visible    ${math-game-title}
+    Element Should Not Be Visible    ${ready?}
+    Element Text Should Be    ${start-over-button}    Start over.
+    Element Should Contain    ${status}    Time left
+    select_other_language    'fi'
+    Element Text Should Be    ${start-over-button}    Aloita alusta.
+    Element Should Contain    ${status}    Aikaa jäljellä
+    select_other_language    'en'
+    Element Text Should Be    ${start-over-button}    Start over.
+    Element Should Contain    ${status}    Time left
+    check_equation-number-elements    ${equation-number}
+    Element Should Be Visible    ${central_content-div}//div[@data-testid="equation-${equation-number}"]//div[@class="progressbar-progress"]
+    Element Should Not Be Visible    ${result}
+    Element Should Be Disabled    xpath: //button[text()= "NEXT ❯"]
