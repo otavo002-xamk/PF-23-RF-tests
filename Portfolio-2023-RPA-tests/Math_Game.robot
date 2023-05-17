@@ -19,6 +19,7 @@ ${options-table-4}    xpath: //tbody[@data-testid="equation-options-table-tb-4"]
 
 
 
+
 *** Test Cases ***
 checking_components
     browser_opening
@@ -31,41 +32,37 @@ checking_components
     select_other_language    'en'
     check_start-page-elements    'en'
     Element Should Not Be Visible    ${start-over-button}
-    check_equation-number-elements    6
+    check_equation-elements    6
     Element Should Not Be Visible    ${status}
     Element Should Not Be Visible    ${central_content-div}//div[@class="progressbar-progress"]
     Click Button    ${start-button}
     check_elements_after_start    0
     ${sum}    calculate_sum    0
     Click Element    xpath: //td[text()="${sum}"]
-    ${correct-count}    Get Element Count    xpath: //td[text()="${sum}"]
-    Element Should Be Visible    xpath: //tbody[@data-testid="equation-options-table-tb-0"]//td[text()="${sum}"][1]//img[@alt="correct"]
-    Element Should Not Be Visible    xpath: //tbody[@data-testid="equation-options-table-tb-0"]//td[text()="${sum}"][1]//preceding::td//img[@alt="correct"]
-    Element Should Not Be Visible    xpath: //tbody[@data-testid="equation-options-table-tb-0"]//td[text()="${sum}"][${correct-count}]//following-sibling::td//img[@alt="correct"]
+    check_correct-count    ${sum}    0
     Element Should Not Be Visible    xpath: //tbody[@data-testid="equation-options-table-tb-0"]//img[@alt="incorrect"]
-    Element Should Not Be Visible    ${status}
-    Element Text Should Be    ${result}    Correct!
-    select_other_language    'fi'
-    Element Text Should Be    ${result}    Oikein!
-    select_other_language    'en'
-    Element Text Should Be    ${result}    Correct!
-    Click Element    xpath: //button[text()="NEXT ❯"]
+    check_result_&_click_next    Correct!    Oikein!    0
     check_elements_after_start    1
     ${sum1}    calculate_sum    1
-    ${correct-count1}    Get Element Count    xpath: //td[text()="${sum1}"]
-    ${first-option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-0"]
-    ${second-option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-1"]
-    ${third-option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-2"]
-    ${fourth-option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-3"]
-    IF    ${first-option} != ${sum1}
+    ${first_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-0"]
+    ${second_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-1"]
+    ${third_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-2"]
+    ${fourth_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-3"]
+    IF    ${first_option} != ${sum1}
         Click Element    xpath: //td[@data-testid="equation-options-table-td-1-0"]
-    ELSE IF    ${second-option} != ${sum1}
+        check_false-count    0    1
+    ELSE IF    ${second_option} != ${sum1}
         Click Element    xpath: //td[@data-testid="equation-options-table-td-1-1"]
-    ELSE IF    ${third-option} != ${sum1}
+        check_false-count    1    1
+    ELSE IF    ${third_option} != ${sum1}
         Click Element    xpath: //td[@data-testid="equation-options-table-td-1-2"]
-    ELSE IF    ${fourth-option} != ${sum1}
+        check_false-count    2    1
+    ELSE IF    ${fourth_option} != ${sum1}
         Click Element    xpath: //td[@data-testid="equation-options-table-td-1-3"]
+        check_false-count    3    1
     END
+    check_correct-count    ${sum1}    1
+    check_result_&_click_next    Wrong!    Väärin!    1
 
 *** Keywords ***
 calculate_sum
@@ -88,7 +85,7 @@ check_start-page-elements
         Element Text Should Be    ${start-button}    Aloita!
     END
 
-check_equation-number-elements
+check_equation-elements
     [Arguments]    ${equation-number}
     IF    ${equation-number} == 6
         FOR    ${i}    IN RANGE    ${5}
@@ -127,7 +124,37 @@ check_elements_after_start
     select_other_language    'en'
     Element Text Should Be    ${start-over-button}    Start over.
     Element Should Contain    ${status}    Time left
-    check_equation-number-elements    ${equation-number}
+    check_equation-elements    ${equation-number}
     Element Should Be Visible    ${central_content-div}//div[@data-testid="equation-${equation-number}"]//div[@class="progressbar-progress"]
     Element Should Not Be Visible    ${result}
     Element Should Be Disabled    xpath: //button[text()= "NEXT ❯"]
+
+check_correct-count
+    [Arguments]    ${sum}    ${equation-number}
+    ${correct_count}    Get Element Count    xpath: //tbody[@data-testid="equation-options-table-tb-${equation-number}"]//td[text()="${sum}"]
+    ${correct_symbol-count}    Get Element Count    xpath: //tbody[@data-testid="equation-options-table-tb-${equation-number}"]//img[@alt="correct"]
+    ${correct_symbol_&_count}    Get Element Count    xpath: //tbody[@data-testid="equation-options-table-tb-${equation-number}"]//td[text()="${sum}"]//img[@alt="correct"]
+    Wait For Condition    return ${correct_count} == ${correct_symbol-count}
+    Wait For Condition    return ${correct_count} == ${correct_symbol_&_count}
+
+check_false-count
+    [Arguments]    ${option-index}    ${equation-number}
+    ${false-count}    Get Element Count    xpath: //tbody[@data-testid="equation-options-table-tb-${equation-number}"]//img[@alt="incorrect"]
+    Wait For Condition    return ${false-count} == 1
+    Element Should Be Visible    xpath: //tbody[@data-testid="equation-options-table-tb-${equation-number}"]//td[@data-testid="equation-options-table-td-${equation-number}-${option-index}"]//img[@alt="incorrect"]
+
+
+
+check_result_&_click_next
+    [Arguments]    ${eng_result}    ${fin_result}    ${equation-number}
+    Element Should Not Be Visible    xpath: //p[contains(text(), "Time left") or contains(text(), "Aikaa jäljellä")]
+    Element Text Should Be    xpath: //div[@data-testid="equation-${equation-number}"]//p    ${eng_result}
+    select_other_language    'fi'
+    Element Text Should Be    xpath: //div[@data-testid="equation-${equation-number}"]//p    ${fin_result}
+    select_other_language    'en'
+    Element Text Should Be    xpath: //div[@data-testid="equation-${equation-number}"]//p    ${eng_result}
+    Element Should Be Visible    xpath: //div[@data-testid="random-number-${equation-number}-0"]
+    Element Should Be Visible    xpath: //div[@data-testid="random-number-${equation-number}-1"]
+    Element Should Be Visible    xpath: //div[@data-testid="random-number-${equation-number}-2"]
+    Element Should Be Visible    xpath: //div[@data-testid="equation-${equation-number}"]//div[@class="progressbar-progress"]
+    Click Element    xpath: //button[text()="NEXT ❯"]
