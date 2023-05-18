@@ -14,13 +14,6 @@ ${options-table-2}    xpath: //tbody[@data-testid="equation-options-table-tb-2"]
 ${options-table-3}    xpath: //tbody[@data-testid="equation-options-table-tb-3"]
 ${options-table-4}    xpath: //tbody[@data-testid="equation-options-table-tb-4"]
 
-
-
-
-
-
-
-
 *** Test Cases ***
 checking_components
     [Setup]    browser_opening
@@ -48,18 +41,13 @@ checking_components
     ${second_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-1"]
     ${third_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-2"]
     ${fourth_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-3"]
-    IF    ${first_option} != ${sum-1}
-        Click Element    xpath: //td[@data-testid="equation-options-table-td-1-0"]
-        check_false-count    0    1
-    ELSE IF    ${second_option} != ${sum-1}
-        Click Element    xpath: //td[@data-testid="equation-options-table-td-1-1"]
-        check_false-count    1    1
-    ELSE IF    ${third_option} != ${sum-1}
-        Click Element    xpath: //td[@data-testid="equation-options-table-td-1-2"]
-        check_false-count    2    1
-    ELSE IF    ${fourth_option} != ${sum-1}
-        Click Element    xpath: //td[@data-testid="equation-options-table-td-1-3"]
-        check_false-count    3    1
+    @{options}=    Create Dictionary    0    ${first_option}    1    ${second_option}    2    ${third_option}    3    ${fourth_option}
+    FOR    ${option}    IN    @{options}
+        IF    ${options[${option}]} != ${sum-1}
+            Click Element    xpath: //td[@data-testid="equation-options-table-td-1-${option}"]
+            check_false-count    ${option}    1
+            BREAK
+        END
     END
     check_correct-count    ${sum-1}    1
     check_result_&_click_next    Wrong!    Väärin!    1
@@ -92,7 +80,6 @@ checking_components
     Element Should Not Be Visible    ${ready?}
     Click Element    xpath: //button[text()="Start over."]
     check_start-page-elements    'en'
-
     [Teardown]    Close Browser
 
 *** Keywords ***
