@@ -20,9 +20,10 @@ ${options-table-4}    xpath: //tbody[@data-testid="equation-options-table-tb-4"]
 
 
 
+
 *** Test Cases ***
 checking_components
-    browser_opening
+    [Setup]    browser_opening
     Element Should Not Be Visible    ${math-game-title}
     Element Should Not Be Visible    ${ready?}
     Click Link    link: Math Game
@@ -36,6 +37,7 @@ checking_components
     Element Should Not Be Visible    xpath: //p[contains(text(), "Time left") or contains(text(), "Aikaa jäljellä")]\n
     Click Button    ${start-button}
     check_elements_after_start    0
+    Element Text Should Be    xpath: //div[@class="flex gap-10 justify-center"]//p    0 / 5
     ${sum-0}    click_correct    0
     check_correct-count    ${sum-0}    0
     Element Should Not Be Visible    xpath: //tbody[@data-testid="equation-options-table-tb-0"]//img[@alt="incorrect"]
@@ -62,8 +64,9 @@ checking_components
     check_correct-count    ${sum-1}    1
     check_result_&_click_next    Wrong!    Väärin!    1
     check_elements_after_start    2
-    FOR    ${i}    IN RANGE    ${9}
-        Element Text Should Be    xpath: //div[@data-testid="equation-2"]//p[contains(text(), "Time left")]    Time left: ${9 - ${i}}
+    Sleep    0.5
+    FOR    ${i}    IN RANGE    ${8}
+        Element Text Should Be    xpath: //div[@data-testid="equation-2"]//p[contains(text(), "Time left")]    Time left: ${8 - ${i}}
         Sleep    1
     END
     check_result_&_click_next    Time ended!    Aika loppui!    2
@@ -72,7 +75,25 @@ checking_components
     check_result_&_click_next    Correct!    Oikein!    3
     check_elements_after_start    4
     ${sum-4}    click_correct    4
+    Element Should Not Be Visible    xpath: //h2[contains(text(), "Your results")]
     check_result_&_click_next    Correct!    Oikein!    4
+    Element Text Should Be    xpath: //h2[contains(text(), "Your results")]    Your results: 3 / 5
+    FOR    ${i}    IN RANGE    ${5}
+        FOR    ${j}    IN RANGE    ${3}
+            Element Should Be Visible    xpath: //div[@data-testid="random-number-${i}-${j}"]
+            Element Should Be Visible    xpath: //div[@class="progressbar-progress"]
+        END
+    END
+    check_all_result-texts    Correct!    Wrong!    Time ended!
+    select_other_language    'fi'
+    check_all_result-texts    Oikein!    Väärin!    Aika loppui!
+    select_other_language    'en'
+    check_all_result-texts    Correct!    Wrong!    Time ended!
+    Element Should Not Be Visible    ${ready?}
+    Click Element    xpath: //button[text()="Start over."]
+    check_start-page-elements    'en'
+
+    [Teardown]    Close Browser
 
 *** Keywords ***
 calculate_sum
@@ -129,7 +150,7 @@ check_equation-elements
 
 check_elements_after_start
     [Arguments]    ${equation-number}
-    [Documentation]    The keyword checks the elements of math game right after starting the game. The equation number is given as argument.
+    [Documentation]    The keyword checks the elements of math game right after starting every new equation. The equation number is given as argument.
     Element Should Be Visible    ${math-game-title}
     Element Should Not Be Visible    ${ready?}
     Element Text Should Be    ${start-over-button}    Start over.
@@ -155,7 +176,7 @@ check_correct-count
 
 check_false-count
     [Arguments]    ${option-index}    ${equation-number}
-    [Documentation]    The keyword checks that there's only one incorrect-symbol in the options-table and that it's in the same table cell with the table cell that is clicked. The option index and equation number are given as arguments.
+    [Documentation]    The keyword checks that there's only one incorrect-symbol in the options-table and that it's in the same table cell with the table cell that is clicked. The option index (i.e. the table-cell that is clicked) and equation number are given as arguments.
     ${false-count}    Get Element Count    xpath: //tbody[@data-testid="equation-options-table-tb-${equation-number}"]//img[@alt="incorrect"]
     Wait For Condition    return ${false-count} == 1
     Element Should Be Visible    xpath: //tbody[@data-testid="equation-options-table-tb-${equation-number}"]//td[@data-testid="equation-options-table-td-${equation-number}-${option-index}"]//img[@alt="incorrect"]
@@ -177,3 +198,11 @@ click_correct
     ${sum}    calculate_sum    ${equation-number}
     Click Element    xpath: //div[@data-testid="equation-${equation-number}"]//td[text()="${sum}"]
     [Return]    ${sum}
+
+check_all_result-texts
+    [Arguments]    ${correct}    ${incorrect}    ${time_ended}
+    Element Text Should Be    xpath: //div[@data-testid="equation-0"]//p    ${correct}
+    Element Text Should Be    xpath: //div[@data-testid="equation-1"]//p    ${incorrect}
+    Element Text Should Be    xpath: //div[@data-testid="equation-2"]//p    ${time_ended}
+    Element Text Should Be    xpath: //div[@data-testid="equation-3"]//p    ${correct}
+    Element Text Should Be    xpath: //div[@data-testid="equation-4"]//p    ${correct}
