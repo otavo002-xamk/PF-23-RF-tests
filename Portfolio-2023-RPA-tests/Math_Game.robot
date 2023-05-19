@@ -14,6 +14,8 @@ ${options-table-2}    xpath: //tbody[@data-testid="equation-options-table-tb-2"]
 ${options-table-3}    xpath: //tbody[@data-testid="equation-options-table-tb-3"]
 ${options-table-4}    xpath: //tbody[@data-testid="equation-options-table-tb-4"]
 
+
+
 *** Test Cases ***
 checking_components
     [Setup]    browser_opening
@@ -24,7 +26,6 @@ checking_components
     select_other_language    'fi'
     check_start-page-elements    'fi'
     select_other_language    'en'
-    check_start-page-elements    'en'
     Element Should Not Be Visible    ${start-over-button}
     check_equation-elements    6
     Element Should Not Be Visible    xpath: //p[contains(text(), "Time left") or contains(text(), "Aikaa jäljellä")]\n
@@ -36,20 +37,20 @@ checking_components
     Element Should Not Be Visible    xpath: //tbody[@data-testid="equation-options-table-tb-0"]//img[@alt="incorrect"]
     check_result_&_click_next    Correct!    Oikein!    0
     check_elements_after_start    1
-    ${sum-1}    calculate_sum    1
+    ${sum_1}    calculate_sum    1
     ${first_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-0"]
     ${second_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-1"]
     ${third_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-2"]
     ${fourth_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-3"]
-    @{options}=    Create Dictionary    0    ${first_option}    1    ${second_option}    2    ${third_option}    3    ${fourth_option}
-    FOR    ${option}    IN    @{options}
-        IF    ${options[${option}]} != ${sum-1}
+    &{options}=    Create Dictionary    0    ${first_option}    1    ${second_option}    2    ${third_option}    3    ${fourth_option}
+    FOR    ${option}    IN    @{options.keys()}
+        IF    ${options["${option}"]} != ${sum_1}
             Click Element    xpath: //td[@data-testid="equation-options-table-td-1-${option}"]
             check_false-count    ${option}    1
             BREAK
         END
     END
-    check_correct-count    ${sum-1}    1
+    check_correct-count    ${sum_1}    1
     check_result_&_click_next    Wrong!    Väärin!    1
     check_elements_after_start    2
     Sleep    0.5
@@ -65,21 +66,37 @@ checking_components
     ${sum-4}    click_correct    4
     Element Should Not Be Visible    xpath: //h2[contains(text(), "Your results")]
     check_result_&_click_next    Correct!    Oikein!    4
-    Element Text Should Be    xpath: //h2[contains(text(), "Your results")]    Your results: 3 / 5
     FOR    ${i}    IN RANGE    ${5}
         FOR    ${j}    IN RANGE    ${3}
             Element Should Be Visible    xpath: //div[@data-testid="random-number-${i}-${j}"]
             Element Should Be Visible    xpath: //div[@class="progressbar-progress"]
         END
     END
-    check_all_result-texts    Correct!    Wrong!    Time ended!
+    check_all_result-texts    Correct!    Wrong!    Time ended!    Your results
     select_other_language    'fi'
-    check_all_result-texts    Oikein!    Väärin!    Aika loppui!
+    check_all_result-texts    Oikein!    Väärin!    Aika loppui!    Tuloksesi
     select_other_language    'en'
-    check_all_result-texts    Correct!    Wrong!    Time ended!
     Element Should Not Be Visible    ${ready?}
-    Click Element    xpath: //button[text()="Start over."]
+    Click Button    xpath: //button[text()="Start over."]
     check_start-page-elements    'en'
+    [Teardown]    Close Browser
+
+choosing_correctly
+    [Setup]    browser_opening
+    Click Link    link: Math Game
+    Click Button    ${start-button}
+    FOR    ${i}    IN RANGE    ${5}
+        Element Text Should Be    xpath: //div[@class="flex gap-10 justify-center"]//p    ${i} / 5
+        click_correct    ${i}
+        Element Text Should Be    xpath: //div[@class="flex gap-10 justify-center"]//p    ${i+1} / 5
+        Click Button    xpath: //button[text()="NEXT ❯"]
+    END
+    Element Text Should Be    xpath: //h2[contains(text(), "Your results")]    Your results: 5 / 5
+    Element Should Be Visible    xpath: //div[@class="p-12 lg:p-0"]//h2[text()="YOU DID IT!!!"]
+    Element Should Not Be Visible    xpath: //div[@class="p-12 lg:p-0"]//h2[text()="KAIKKI OIKEIN!!!"]
+    select_other_language    'fi'
+    Element Should Be Visible    xpath: //div[@class="p-12 lg:p-0"]//h2[text()="KAIKKI OIKEIN!!!"]
+    Element Should Not Be Visible    xpath: //div[@class="p-12 lg:p-0"]//h2[text()="YOU DID IT!!!"]
     [Teardown]    Close Browser
 
 *** Keywords ***
@@ -178,7 +195,7 @@ check_result_&_click_next
     select_other_language    'en'
     Element Text Should Be    xpath: //div[@data-testid="equation-${equation-number}"]//p    ${eng_result}
     check_equation-elements    ${equation-number}
-    Click Element    xpath: //button[text()="NEXT ❯"]
+    Click Button    xpath: //button[text()="NEXT ❯"]
 
 click_correct
     [Arguments]    ${equation-number}
@@ -187,9 +204,10 @@ click_correct
     [Return]    ${sum}
 
 check_all_result-texts
-    [Arguments]    ${correct}    ${incorrect}    ${time_ended}
+    [Arguments]    ${correct}    ${incorrect}    ${time_ended}    ${your_results}
     Element Text Should Be    xpath: //div[@data-testid="equation-0"]//p    ${correct}
     Element Text Should Be    xpath: //div[@data-testid="equation-1"]//p    ${incorrect}
     Element Text Should Be    xpath: //div[@data-testid="equation-2"]//p    ${time_ended}
     Element Text Should Be    xpath: //div[@data-testid="equation-3"]//p    ${correct}
     Element Text Should Be    xpath: //div[@data-testid="equation-4"]//p    ${correct}
+    Element Text Should Be    xpath: //h2[contains(text(), "Your results") or contains(text(), "Tuloksesi")]    ${your_results}: 3 / 5
