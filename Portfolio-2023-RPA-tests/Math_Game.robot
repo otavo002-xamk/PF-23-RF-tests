@@ -16,6 +16,7 @@ ${options-table-4}    xpath: //tbody[@data-testid="equation-options-table-tb-4"]
 
 
 
+
 *** Test Cases ***
 checking_components
     [Setup]    browser_opening
@@ -38,15 +39,11 @@ checking_components
     check_result_&_click_next    Correct!    Oikein!    0
     check_elements_after_start    1
     ${sum_1}    calculate_sum    1
-    ${first_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-0"]
-    ${second_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-1"]
-    ${third_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-2"]
-    ${fourth_option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-3"]
-    &{options}=    Create Dictionary    0    ${first_option}    1    ${second_option}    2    ${third_option}    3    ${fourth_option}
-    FOR    ${option}    IN    @{options.keys()}
-        IF    ${options["${option}"]} != ${sum_1}
-            Click Element    xpath: //td[@data-testid="equation-options-table-td-1-${option}"]
-            check_false-count    ${option}    1
+    FOR    ${i}    IN RANGE    ${4}
+        ${option}    Get Text    xpath: //td[@data-testid="equation-options-table-td-1-${i}"]
+        IF    ${option} != ${sum_1}
+            Click Element    xpath: //td[@data-testid="equation-options-table-td-1-${i}"]
+            check_false-count    ${i}    1
             BREAK
         END
     END
@@ -60,10 +57,10 @@ checking_components
     END
     check_result_&_click_next    Time ended!    Aika loppui!    2
     check_elements_after_start    3
-    ${sum-3}    click_correct    3
+    ${sum_3}    click_correct    3
     check_result_&_click_next    Correct!    Oikein!    3
     check_elements_after_start    4
-    ${sum-4}    click_correct    4
+    ${sum_4}    click_correct    4
     Element Should Not Be Visible    xpath: //h2[contains(text(), "Your results")]
     check_result_&_click_next    Correct!    Oikein!    4
     FOR    ${i}    IN RANGE    ${5}
