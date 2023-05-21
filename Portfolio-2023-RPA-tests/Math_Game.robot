@@ -3,34 +3,34 @@ Library           SeleniumLibrary
 Resource          resources/resource.resource
 
 *** Variables ***
-${math-game-title}    ${central_content-div}//h1
-${ready?}         ${central_content-div}//p[text()="Ready?" or text()="Oletko valmis?"]
-${start-button}    xpath: //button[text()="Start!" or text()="Aloita!"]
-${start-over-button}    xpath: //button[text()="Start over." or text()="Aloita alusta."]
 ${result}         ${central_content-div}//p[text()="Time ended!" or text()="Correct!" or text()="Wrong!" or text()="Aika loppui!" or text()="Oikein!" or text()="Väärin!"]
-${options-table-0}    xpath: //tbody[@data-testid="equation-options-table-tb-0"]
-${options-table-1}    xpath: //tbody[@data-testid="equation-options-table-tb-1"]
-${options-table-2}    xpath: //tbody[@data-testid="equation-options-table-tb-2"]
-${options-table-3}    xpath: //tbody[@data-testid="equation-options-table-tb-3"]
-${options-table-4}    xpath: //tbody[@data-testid="equation-options-table-tb-4"]
-
-
+${options-table-0}    tbody[@data-testid="equation-options-table-tb-0"]
+${options-table-1}    tbody[@data-testid="equation-options-table-tb-1"]
+${options-table-2}    tbody[@data-testid="equation-options-table-tb-2"]
+${options-table-3}    tbody[@data-testid="equation-options-table-tb-3"]
+${options-table-4}    tbody[@data-testid="equation-options-table-tb-4"]
+&{math-game-title}    locator=h1    en=Math Game!    fi=Matikkapeli!
+&{start-button}    locator=button[text()="Start!" or text()="Aloita!"]    en=Start!    fi=Aloita!
+&{ready?}         locator=p[text()='Ready?' or text()='Oletko valmis?']    en=Ready?    fi=Oletko valmis?
+&{start-over-button}    locator=button[text()="Start over." or text()="Aloita alusta."]    en=Start over.    fi=Aloita alusta.
+&{status}         locator=p[contains(text(), "Time left") or contains(text(), "Aikaa jäljellä")]    en=Time left    fi=Aikaa jäljellä
 
 
 *** Test Cases ***
 checking_components
     [Setup]    browser_opening
-    Element Should Not Be Visible    ${math-game-title}
-    Element Should Not Be Visible    ${ready?}
-    Click Link    link: Math Game
-    check_start-page-elements    'en'
+    Element Should Not Be Visible    xpath: //h1
+    Element Should Not Be Visible    xpath: //${ready?}[locator]
+    Click Link    link: ${navbar-links}[math_game][en]
+    check_start-page-elements    en
     select_other_language    'fi'
-    check_start-page-elements    'fi'
+    check_start-page-elements    fi
     select_other_language    'en'
-    Element Should Not Be Visible    ${start-over-button}
+    check_start-page-elements    en
+    Element Should Not Be Visible    xpath: //${start-over-button}[locator]
     check_equation-elements    6
-    Element Should Not Be Visible    xpath: //p[contains(text(), "Time left") or contains(text(), "Aikaa jäljellä")]\n
-    Click Button    ${start-button}
+    Element Should Not Be Visible    xpath: //${status}[locator]
+    Click Button    xpath: //${central_content-div}//${start-button}[locator]
     check_elements_after_start    0
     Element Text Should Be    xpath: //div[@class="flex gap-10 justify-center"]//p    0 / 5
     ${sum-0}    click_correct    0
@@ -73,9 +73,9 @@ checking_components
     select_other_language    'fi'
     check_all_result-texts    Oikein!    Väärin!    Aika loppui!    Tuloksesi
     select_other_language    'en'
-    Element Should Not Be Visible    ${ready?}
+    Element Should Not Be Visible    ${ready?}[locator]
     Click Button    xpath: //button[text()="Start over."]
-    check_start-page-elements    'en'
+    check_start-page-elements    en
     [Teardown]    Close Browser
 
 choosing_correctly
@@ -109,22 +109,16 @@ calculate_sum
 check_start-page-elements
     [Arguments]    ${language}
     [Documentation]    The keyword checks the start-page elements in the math game. Language is given as argument.
-    IF    ${language} == "en"
-        Element Text Should Be    ${math-game-title}    Math Game!
-        Element Text Should Be    ${ready?}    Ready?
-        Element Text Should Be    ${start-button}    Start!
-    ELSE
-        Element Text Should Be    ${math-game-title}    Matikkapeli!
-        Element Text Should Be    ${ready?}    Oletko valmis?
-        Element Text Should Be    ${start-button}    Aloita!
-    END
+    Element Text Should Be    xpath: //${central_content-div}//${math-game-title}[locator]    ${math-game-title}[${language}]
+    Element Text Should Be    xpath: //${central_content-div}//${ready?}[locator]    ${ready?}[${language}]
+    Element Text Should Be    xpath: //${central_content-div}//${start-button}[locator]    ${start-button}[${language}]
 
 check_equation-elements
     [Arguments]    ${equation-number}
     [Documentation]    The keyword checks equation elements in the math game, that is four options table, three random numbers and progress-bar. Equation number is given as argument. If the equation number is 6 (i.e. the game hasn't started yet), no element should be visible. Else only the elements matching the equation number should be visible.
     IF    ${equation-number} == 6
         FOR    ${i}    IN RANGE    ${5}
-            Element Should Not Be Visible    ${options-table-${i}}
+            Element Should Not Be Visible    xpath: //${options-table-${i}}
         END
         FOR    ${i}    IN RANGE    ${5}
             FOR    ${j}    IN RANGE    ${3}
@@ -135,9 +129,9 @@ check_equation-elements
     ELSE
         FOR    ${i}    IN RANGE    ${5}
             IF    ${i} == ${equation-number}
-                Element Should Be Visible    ${options-table-${i}}
+                Element Should Be Visible    xpath: //${central_content-div}//${options-table-${i}}
                 FOR    ${j}    IN RANGE    ${3}
-                    Element Should Be Visible    xpath: //div[@data-testid="random-number-${i}-${j}"]
+                    Element Should Be Visible    xpath: //${central_content-div}//div[@data-testid="random-number-${i}-${j}"]
                 END
             ELSE
                 Element Should Not Be Visible    ${options-table-${i}}
@@ -146,22 +140,22 @@ check_equation-elements
                 END
             END
         END
-        Element Should Be Visible    xpath: //div[@data-testid="equation-${equation-number}"]//div[@class="progressbar-progress"]
+        Element Should Be Visible    xpath: //${central_content-div}//div[@data-testid="equation-${equation-number}"]//div[@class="progressbar-progress"]
     END
 
 check_elements_after_start
     [Arguments]    ${equation-number}
     [Documentation]    The keyword checks the elements of math game right after starting every new equation. The equation number is given as argument.
-    Element Should Be Visible    ${math-game-title}
-    Element Should Not Be Visible    ${ready?}
-    Element Text Should Be    ${start-over-button}    Start over.
-    Element Should Contain    xpath: //div[@data-testid="equation-${equation-number}"]//p[contains(text(), "Time left") or contains(text(), "Aikaa jäljellä")]    Time left
+    Element Should Be Visible    xpath: //${central_content-div}//${math-game-title}[locator]
+    Element Should Not Be Visible    xpath: //${central_content-div}//${ready?}[locator]
+    Element Text Should Be    xpath: //${central_content-div}//${start-over-button}[locator]    ${start-over-button}[en]
+    Element Should Contain    xpath: //${central_content-div}//${status}[locator]    ${status}[en]
     select_other_language    'fi'
-    Element Text Should Be    ${start-over-button}    Aloita alusta.
-    Element Should Contain    xpath: //div[@data-testid="equation-${equation-number}"]//p[contains(text(), "Time left") or contains(text(), "Aikaa jäljellä")]    Aikaa jäljellä
+    Element Text Should Be    xpath: //${central_content-div}//${start-over-button}[locator]    ${start-over-button}[fi]
+    Element Should Contain    xpath: //${central_content-div}//${status}[locator]    Aikaa jäljellä
     select_other_language    'en'
-    Element Text Should Be    ${start-over-button}    Start over.
-    Element Should Contain    xpath: //div[@data-testid="equation-${equation-number}"]//p[contains(text(), "Time left") or contains(text(), "Aikaa jäljellä")]    Time left
+    Element Text Should Be    xpath: //${central_content-div}//${start-over-button}[locator]    ${start-over-button}[en]
+    Element Should Contain    xpath: //${central_content-div}//${status}[locator]    ${status}[en]
     check_equation-elements    ${equation-number}
     Element Should Not Be Visible    ${result}
     Element Should Be Disabled    xpath: //button[text()= "NEXT ❯"]

@@ -12,11 +12,13 @@ ${toggle-to-light}    xpath: //img[@alt="sun"]
 &{sample4-item}    path=sample4    en=Sample 4    fi=Näyte 4
 
 
+
+
 *** Test Cases ***
 homepage-button
     browser_opening
     frontpage_opening
-    Click Link    link: Sample 3
+    Click Link    link: ${navbar-links}[sample_3][en]
     Element Should Be Visible    ${sample3_title}
     Element Should Not Be Visible    ${first_slide}
     Click Image    ${logo}
@@ -62,6 +64,6 @@ this_flag_should_be_visible
 check_menu_items
     [Arguments]    ${language}
     [Documentation]    checks texts in each menu-item is in correct language
-    FOR    ${item}    IN    @{navbar-items}
-        Element Text Should Be    xpath:// a[@href="/${item}[path]"]    ${item}[${language}]
+    FOR    ${link}    IN    &{navbar-links}
+        Element Text Should Be    xpath:// a[@href="/${link[1]['path']}"]    ${link}[1][${language}]
     END
