@@ -14,28 +14,29 @@ ${toggle-to-light}    xpath: //img[@alt="sun"]
 
 
 
+
 *** Test Cases ***
 homepage-button
-    browser_opening
+    [Setup]    browser_opening
     frontpage_opening
     Click Link    link: ${navbar-links}[sample_3][en]
     Element Should Be Visible    ${sample3_title}
     Element Should Not Be Visible    ${first_slide}
     Click Image    ${logo}
     frontpage_opening
-    Close Browser
+    [Teardown]    Close Browser
 
 theme-toggler
-    browser_opening
+    [Setup]    browser_opening
     Element Attribute Value Should Be    tag:body    class    \
     Click Image    ${toggle-to-dark}
     Element Attribute Value Should Be    tag:body    class    dark
     Click Image    ${toggle-to-light}
     Element Attribute Value Should Be    tag:body    class    \
-    Close Browser
+    [Teardown]    Close Browser
 
 language-toggler
-    browser_opening
+    [Setup]    browser_opening
     this_flag_should_be_visible    "en"
     check_menu_items    en
     select_other_language    "fi"
@@ -44,7 +45,7 @@ language-toggler
     select_other_language    "en"
     this_flag_should_be_visible    "en"
     check_menu_items    en
-    Close Browser
+    [Teardown]    Close Browser
 
 *** Keywords ***
 frontpage_opening

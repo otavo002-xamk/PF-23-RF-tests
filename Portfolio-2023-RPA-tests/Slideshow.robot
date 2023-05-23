@@ -7,9 +7,10 @@ ${indicator-class-non-active}    react-any-slider-dots__dot react-any-slider-dot
 ${indicator-class-active}    react-any-slider-dots__dot react-any-slider-dots__dot--big react-any-slider-dots__dot--active
 
 
+
 *** Test Cases ***
 arrow-buttons
-    browser_opening
+    [Setup]    browser_opening
     FOR    ${i}    IN RANGE    ${8}
         FOR    ${j}    IN RANGE    ${8}
             check_correct_slideshow-index_is_visible    ${i}    ${j}
@@ -23,20 +24,20 @@ arrow-buttons
             check_correct_slideshow-index_is_visible    ${7 - ${i}}    ${7 - ${j}}
         END
     END
-    Close Browser
+    [Teardown]    Close Browser
 
 indicators
-    browser_opening
+    [Setup]    browser_opening
     FOR    ${i}    IN RANGE    ${8}
         Click Element    id:sliderdot${i}
         FOR    ${j}    IN RANGE    ${8}
             check_correct_slideshow-index_is_visible    ${i}    ${j}
         END
     END
-    Close Browser
+    [Teardown]    Close Browser
 
 automatic_slide-change
-    browser_opening
+    [Setup]    browser_opening
     FOR    ${i}    IN RANGE    ${8}
         FOR    ${j}    IN RANGE    ${8}
             check_correct_slideshow-index_is_visible    ${i}    ${j}
@@ -48,7 +49,7 @@ automatic_slide-change
             Wait Until Element Is Not Visible    xpath: //img[@alt="slideshow-${i}"]
     END
     Element Should Be Visible    ${first_slide}
-    Close Browser
+    [Teardown]    Close Browser
 
 *** Keywords ***
 check_correct_slideshow-index_is_visible

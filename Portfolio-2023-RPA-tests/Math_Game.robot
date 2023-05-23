@@ -6,6 +6,7 @@ Resource          resources/math-game.resource
 *** Variables ***
 
 
+
 *** Test Cases ***
 checking_components
     [Setup]    browser_opening
@@ -20,6 +21,7 @@ checking_components
     Element Should Not Be Visible    xpath: //${start-over-button}[locator]
     check_equation-elements    6
     Element Should Not Be Visible    xpath: //${status}[locator]
+    Element Should Not Be Visible    xpath: //${math-game-bottom}
     Click Button    xpath: //${central_content-div}//${start-button}[locator]
     check_elements_after_start    0
     Element Text Should Be    xpath: //${math-game-bottom}//p    0 / 5
@@ -45,7 +47,7 @@ checking_components
         Element Text Should Be    xpath: //${central_content-div}//${equation-div-2}//${status}[locator]    Time left: ${8 - ${i}}
         Sleep    1
     END
-    check_result_&_click_next    ${time-ended}    2
+    check_result_&_click_next    ${time_ended}    2
     check_elements_after_start    3
     ${sum_3}=    click_correct    3
     check_result_&_click_next    ${correct}    3
@@ -56,32 +58,34 @@ checking_components
     FOR    ${i}    IN RANGE    ${5}
         FOR    ${j}    IN RANGE    ${3}
             Element Should Be Visible    xpath: //div[@data-testid="random-number-${i}-${j}"]
-            Element Should Be Visible    xpath: //div[@class="progressbar-progress"]
         END
+        Element Should Be Visible    xpath: //${central_content-div}//${equation-div-${i}}//div[@class="progressbar-progress"]
     END
-    check_all_result-texts    Correct!    Wrong!    Time ended!    Your results
+    check_all_result-texts    en
     select_other_language    'fi'
-    check_all_result-texts    Oikein!    Väärin!    Aika loppui!    Tuloksesi
+    check_all_result-texts    fi
     select_other_language    'en'
+    check_all_result-texts    en
+    Element Should Not Be Visible    xpath: //${math-game-bottom}
+    Element Should Not Be Visible    xpath: //${u_did_it}[locator]
     Element Should Not Be Visible    ${ready?}[locator]
-    Click Button    xpath: //button[text()="Start over."]
+    Element Should Not Be Visible    xpath: //${start-button}[locator]
+    Click Button    xpath: //${start-over-button}[locator]
     check_start-page-elements    en
     [Teardown]    Close Browser
 
 choosing_correctly
     [Setup]    browser_opening
-    Click Link    link: Math Game
-    Click Button    ${start-button}
+    Click Link    link: ${math-game-link}[en]
+    Click Button    xpath: //${central_content-div}//${start-button}[locator]
     FOR    ${i}    IN RANGE    ${5}
-        Element Text Should Be    xpath: //div[@class="flex gap-10 justify-center"]//p    ${i} / 5
+        Element Text Should Be    xpath: //${central_content-div}//${math-game-bottom}//p    ${i} / 5
         click_correct    ${i}
-        Element Text Should Be    xpath: //div[@class="flex gap-10 justify-center"]//p    ${i+1} / 5
-        Click Button    xpath: //button[text()="NEXT ❯"]
+        Element Text Should Be    xpath: //${central_content-div}//${math-game-bottom}//p    ${i+1} / 5
+        Click Button    xpath: //${central_content-div}//${math-game-bottom}//button[text()="NEXT ❯"]
     END
-    Element Text Should Be    xpath: //h2[contains(text(), "Your results")]    Your results: 5 / 5
-    Element Should Be Visible    xpath: //div[@class="p-12 lg:p-0"]//h2[text()="YOU DID IT!!!"]
-    Element Should Not Be Visible    xpath: //div[@class="p-12 lg:p-0"]//h2[text()="KAIKKI OIKEIN!!!"]
+    Element Text Should Be    xpath: //${central_content-div}//${end-results}[locator]    ${end-results}[en]: 5 / 5
+    Element Text Should Be    xpath: //${central_content-div}//${u_did_it}[locator]    ${u_did_it}[en]
     select_other_language    'fi'
-    Element Should Be Visible    xpath: //div[@class="p-12 lg:p-0"]//h2[text()="KAIKKI OIKEIN!!!"]
-    Element Should Not Be Visible    xpath: //div[@class="p-12 lg:p-0"]//h2[text()="YOU DID IT!!!"]
+    Element Text Should Be    xpath: //${central_content-div}//${u_did_it}[locator]    ${u_did_it}[fi]
     [Teardown]    Close Browser

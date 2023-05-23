@@ -18,8 +18,10 @@ ${equation-div-3}    div[@data-testid="equation-3"]
 ${equation-div-4}    div[@data-testid="equation-4"]
 &{correct}        en=Correct!    fi=Oikein!
 &{incorrect}      en=Wrong!    fi=Väärin!
-&{time-ended}     en=Time ended!    fi=Aika loppui!
+&{time_ended}     en=Time ended!    fi=Aika loppui!
 &{end-results}    locator=h2[contains(text(), "Your results") or contains(text(), "Tuloksesi")]    en=Your results    fi=Tuloksesi
+${progress-bar}    div[@class="progressbar-progress"]
+&{u_did_it}       locator=h2[text()="YOU DID IT!!!" or text()="KAIKKI OIKEIN!!!"]    en=YOU DID IT!!!    fi=KAIKKI OIKEIN!!!
 
 *** Keywords ***
 calculate_sum
@@ -50,7 +52,7 @@ check_equation-elements
                 Element Should Not Be Visible    xpath: //div[@data-testid="random-number-${i}-${j}"]
             END
         END
-        Element Should Not Be Visible    xpath: //div[@class="progressbar-progress"]
+        Element Should Not Be Visible    xpath: //${progress-bar}
     ELSE
         FOR    ${i}    IN RANGE    ${5}
             IF    ${i} == ${equation-number}
@@ -58,14 +60,15 @@ check_equation-elements
                 FOR    ${j}    IN RANGE    ${3}
                     Element Should Be Visible    xpath: //${central_content-div}//div[@data-testid="random-number-${i}-${j}"]
                 END
+                Element Should Be Visible    xpath: //${central_content-div}//${equation-div-${i}}//${progress-bar}
             ELSE
                 Element Should Not Be Visible    ${options-table-${i}}
                 FOR    ${j}    IN RANGE    ${3}
                     Element Should Not Be Visible    xpath: //div[@data-testid="random-number-${i}-${j}"]
                 END
+                Element Should Not Be Visible    xpath: //${equation-div-${i}}//${progress-bar}
             END
         END
-        Element Should Be Visible    xpath: //${central_content-div}//${equation-div-${equation-number}}//div[@class="progressbar-progress"]
     END
 
 check_elements_after_start
@@ -83,7 +86,7 @@ check_elements_after_start
     Element Should Contain    xpath: //${central_content-div}//${status}[locator]    ${status}[en]
     check_equation-elements    ${equation-number}
     Element Should Not Be Visible    xpath: //${result}
-    Element Should Be Disabled    xpath: //button[text()= "NEXT ❯"]
+    Element Should Be Disabled    xpath: //${central_content-div}//${math-game-bottom}//button[text()= "NEXT ❯"]
 
 check_correct-count
     [Arguments]    ${sum}    ${equation-number}
@@ -111,7 +114,7 @@ check_result_&_click_next
     select_other_language    'en'
     Element Text Should Be    xpath: //${central_content-div}//${equation-div-${equation-number}}//p    ${result-message}[en]
     check_equation-elements    ${equation-number}
-    Click Button    xpath: //button[text()="NEXT ❯"]
+    Click Button    xpath: //${central_content-div}//${math-game-bottom}//button[text()="NEXT ❯"]
 
 click_correct
     [Arguments]    ${equation-number}
@@ -120,10 +123,10 @@ click_correct
     [Return]    ${sum}
 
 check_all_result-texts
-    [Arguments]    ${correct}    ${incorrect}    ${time_ended}    ${your_results}
-    Element Text Should Be    xpath: //div[@data-testid="equation-0"]//p    ${correct}
-    Element Text Should Be    xpath: //div[@data-testid="equation-1"]//p    ${incorrect}
-    Element Text Should Be    xpath: //div[@data-testid="equation-2"]//p    ${time_ended}
-    Element Text Should Be    xpath: //div[@data-testid="equation-3"]//p    ${correct}
-    Element Text Should Be    xpath: //div[@data-testid="equation-4"]//p    ${correct}
-    Element Text Should Be    xpath: //h2[contains(text(), "Your results") or contains(text(), "Tuloksesi")]    ${your_results}: 3 / 5
+    [Arguments]    ${language}
+    Element Text Should Be    xpath: //div[@data-testid="equation-0"]//p    ${correct}[${language}]
+    Element Text Should Be    xpath: //div[@data-testid="equation-1"]//p    ${incorrect}[${language}]
+    Element Text Should Be    xpath: //div[@data-testid="equation-2"]//p    ${time_ended}[${language}]
+    Element Text Should Be    xpath: //div[@data-testid="equation-3"]//p    ${correct}[${language}]
+    Element Text Should Be    xpath: //div[@data-testid="equation-4"]//p    ${correct}[${language}]
+    Element Text Should Be    xpath: //${end-results}[locator]    ${end-results}[${language}]: 3 / 5
