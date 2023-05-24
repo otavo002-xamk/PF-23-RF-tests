@@ -13,6 +13,8 @@ ${camera-select}    select[@id="camera-select"]
 ${nasa-api-loader}    div[@data-testid="nasa-api-loader"]
 &{no_pictures_found}    en=No pictures found. Try again with a different sol or different camera.    fi=Valitettavasti kuvia ei löytynyt. Kokeile toista solia tai toista kameraa.
 &{too_big_number}    en=Too big number!    fi=Liian suuri luku!
+${play-slider-btn}    button//child::img[@alt="play-slider-button"]
+${pause-slider-btn}    button//child::img[@alt="pause-slider-button"]
 
 *** Test Cases ***
 checking_components
@@ -46,6 +48,24 @@ invalid_sol
     Element Text Should Be    xpath: //${central_content-div}//${get-images-button}[locator]//following-sibling::p    ${too_big_number}[fi]
     select_other_language    'en'
     Element Text Should Be    xpath: //${central_content-div}//${get-images-button}[locator]//following-sibling::p    ${too_big_number}[en]
+    [Teardown]    Close Browser
+
+curiosity-minislider
+    [Setup]    browser_opening
+    Click Link    ${nasa-api-link}[en]
+    Input Text    ${sol-input}    1444
+    Element Should Not Be Visible    xpath: //${nasa-api-loader}
+    Element Should Not Be Visible    xpath: //${get-images-button}[locator]//following-sibling::div
+    Element Should Not Be Visible    xpath: //${pause-slider-btn}
+    Click Button    xpath: //${central_content-div}//${get-images-button}[locator]
+    Element Should Be Visible    xpath: //${central_content-div}//${nasa-api-loader}
+    Wait Until Element Is Not Visible    xpath: //${nasa-api-loader}
+    Element Should Be Visible    xpath: //${central_content-div}//${pause-slider-btn}
+    FOR    ${i}    IN RANGE    ${10}
+        Element Attribute Value Should Be    xpath: //${central_content-div}//${get-images-button}[locator]//following-sibling::div//img    alt    curiosity-${i}
+        Sleep    1
+    END
+    Element Attribute Value Should Be    xpath: //${central_content-div}//${get-images-button}[locator]//following-sibling::div//img    alt    curiosity-0
     [Teardown]    Close Browser
 
 *** Keywords ***
