@@ -11,24 +11,41 @@ ${camera-select}    select[@id="camera-select"]
 &{get-images-button}    locator=button[text()="Get images from NASA." or text()="Hae kuvat NASAlta."]    en=Get images from NASA.    fi=Hae kuvat NASAlta.
 @{camera-option-texts}    Front Hazard Avoidance Camera    Rear Hazard Avoidance Camera    Mast Camera    Chemistry and Camera Complex    Mars Hand Lens Imager    Mars Descent Imager    Navigation Camera    Panoramic Camera    Miniature Thermal Emission Spectrometer (Mini-TES)
 ${nasa-api-loader}    div[@data-testid="nasa-api-loader"]
+&{no_pictures_found}    en=No pictures found. Try again with a different sol or different camera.    fi=Valitettavasti kuvia ei löytynyt. Kokeile toista solia tai toista kameraa.
+&{too_big_number}    en=Too big number!    fi=Liian suuri luku!
 
 *** Test Cases ***
 checking_components
     [Setup]    browser_opening
     Element Should Not Be Visible    xpath: //${central_content-div}
     Click Link    link: ${navbar-links}[nasa_api][en]
+    Element Attribute Value Should Be    ${sol-input}    placeholder    122
+    FOR    ${i}    IN RANGE    9
+        Element Text Should Be    xpath: //${camera-select}/option[${i+1}]    ${camera-option-texts}[${i}]
+    END
+    Element Should Not Be Visible    xpath: //${nasa-api-loader}
+    Element Should Not Be Visible    xpath: //${get-images-button}[locator]//following-sibling::p
+    Click Element    xpath: //${central_content-div}//${get-images-button}[locator]
+    Element Should Be Visible    xpath: //${central_content-div}//${nasa-api-loader}
+    Wait Until Element Is Not Visible    xpath: //${central_content-div}//${nasa-api-loader}
     check_text-elements    en
     select_other_language    'fi'
     check_text-elements    fi
     select_other_language    'en'
     check_text-elements    en
-    Element Attribute Value Should Be    ${sol-input}    placeholder    122
-    FOR    ${i}    IN RANGE    9
-        Element Text Should Be    xpath: //${camera-select}/option[${i+1}]    ${camera-option-texts}[${i}]
-    END
-    Click Element    xpath: //${central_content-div}//${get-images-button}[locator]
-    Element Should Be Visible    ${central_content-div}//${nasa-api-loader}
+    [Teardown]    Close Browser
 
+invalid_sol
+    [Setup]    browser_opening
+    Click Link    ${nasa-api-link}[en]
+    Input Text    ${sol-input}    3496
+    Element Should Not Be Visible    ${get-images-button}[locator]//following-sibling::p
+    Click Button    xpath: //${central_content-div}//${get-images-button}[locator]
+    Element Text Should Be    xpath: //${central_content-div}//${get-images-button}[locator]//following-sibling::p    ${too_big_number}[en]
+    select_other_language    'fi'
+    Element Text Should Be    xpath: //${central_content-div}//${get-images-button}[locator]//following-sibling::p    ${too_big_number}[fi]
+    select_other_language    'en'
+    Element Text Should Be    xpath: //${central_content-div}//${get-images-button}[locator]//following-sibling::p    ${too_big_number}[en]
     [Teardown]    Close Browser
 
 *** Keywords ***
@@ -38,3 +55,4 @@ check_text-elements
     Element Text Should Be    xpath: //${central_content-div}//${sol-input-label}[locator]    ${sol-input-label}[${language}]
     Element Text Should Be    xpath: //${central_content-div}//${camera-select-label}[locator]    ${camera-select-label}[${language}]
     Element Text Should Be    xpath: //${get-images-button}[locator]    ${get-images-button}[${language}]
+    Element Text Should Be    xpath: //${get-images-button}[locator]//following-sibling::p    ${no_pictures_found}[${language}]
