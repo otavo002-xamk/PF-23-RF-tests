@@ -5,16 +5,17 @@ Resource          resources/resource.resource
 *** Variables ***
 ${nasa-api-title}    NASA API!
 ${sol-input}      id:sol-input
-&{sol-input-label}    locator=input[@id="sol-input"]//preceding::label[@for="sol-input"]    en=Insert sol please (a value between 0 - 3495):    fi=Syötä sol kiitos (luku väliltä 0 - 3495):
+&{sol-input-label}    locator=input[@id="sol-input"]/preceding::label[@for="sol-input"]    en=Insert sol please (a value between 0 - 3495):    fi=Syötä sol kiitos (luku väliltä 0 - 3495):
 ${camera-select}    select[@id="camera-select"]
-&{camera-select-label}    locator=select[@id="camera-select"]//preceding::label[@for="camera-select"]    en=Select camera please:    fi=Valitse kamera kiitos:
+&{camera-select-label}    locator=select[@id="camera-select"]/preceding::label[@for="camera-select"]    en=Select camera please:    fi=Valitse kamera kiitos:
 &{get-images-button}    locator=button[text()="Get images from NASA." or text()="Hae kuvat NASAlta."]    en=Get images from NASA.    fi=Hae kuvat NASAlta.
 @{camera-option-texts}    Front Hazard Avoidance Camera    Rear Hazard Avoidance Camera    Mast Camera    Chemistry and Camera Complex    Mars Hand Lens Imager    Mars Descent Imager    Navigation Camera    Panoramic Camera    Miniature Thermal Emission Spectrometer (Mini-TES)
 ${nasa-api-loader}    div[@data-testid="nasa-api-loader"]
 &{no_pictures_found}    en=No pictures found. Try again with a different sol or different camera.    fi=Valitettavasti kuvia ei löytynyt. Kokeile toista solia tai toista kameraa.
 &{too_big_number}    en=Too big number!    fi=Liian suuri luku!
-${play-slider-btn}    button//child::img[@alt="play-slider-button"]
-${pause-slider-btn}    button//child::img[@alt="pause-slider-button"]
+${play-slider-btn}    button/img[@alt="play-slider-button"]
+${pause-slider-btn}    button/img[@alt="pause-slider-button"]
+${following-sibling_curiosity-minislider-div}    following-sibling::div
 
 *** Test Cases ***
 checking_components
@@ -55,17 +56,24 @@ curiosity-minislider
     Click Link    ${nasa-api-link}[en]
     Input Text    ${sol-input}    1444
     Element Should Not Be Visible    xpath: //${nasa-api-loader}
-    Element Should Not Be Visible    xpath: //${get-images-button}[locator]//following-sibling::div
-    Element Should Not Be Visible    xpath: //${pause-slider-btn}
-    Click Button    xpath: //${central_content-div}//${get-images-button}[locator]
-    Element Should Be Visible    xpath: //${central_content-div}//${nasa-api-loader}
+    Element Should Not Be Visible    xpath: //${get-images-button}[locator]//${following-sibling_curiosity-minislider-div}
+    Click Button    xpath: //${central_content-div}/${get-images-button}[locator]
+    Element Should Be Visible    xpath: //${central_content-div}/${nasa-api-loader}
     Wait Until Element Is Not Visible    xpath: //${nasa-api-loader}
-    Element Should Be Visible    xpath: //${central_content-div}//${pause-slider-btn}
+    Element Should Be Visible    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${pause-slider-btn}
     FOR    ${i}    IN RANGE    ${10}
-        Element Attribute Value Should Be    xpath: //${central_content-div}//${get-images-button}[locator]//following-sibling::div//img    alt    curiosity-${i}
+        Element Attribute Value Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-${i}
         Sleep    1
     END
-    Element Attribute Value Should Be    xpath: //${central_content-div}//${get-images-button}[locator]//following-sibling::div//img    alt    curiosity-0
+    Element Attribute Value Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-0
+    Element Should Not Be Visible    xpath: //${play-slider-btn}
+    Click Element    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${pause-slider-btn}
+    Element Should Not Be Visible    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${pause-slider-btn}
+    Sleep    2
+    Element Attribute Value Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-0
+    Click Element    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${play-slider-btn}
+    Sleep    1
+    Element Attribute Value Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-1
     [Teardown]    Close Browser
 
 *** Keywords ***
