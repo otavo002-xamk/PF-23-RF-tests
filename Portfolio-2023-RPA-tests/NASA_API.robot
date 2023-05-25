@@ -17,6 +17,7 @@ ${play-slider-btn}    button/img[@alt="play-slider-button"]
 ${pause-slider-btn}    button/img[@alt="pause-slider-button"]
 ${following-sibling_curiosity-minislider-div}    following-sibling::div
 
+
 *** Test Cases ***
 checking_components
     [Setup]    browser_opening
@@ -76,6 +77,22 @@ curiosity-minislider
     Element Attribute Value Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-1
     [Teardown]    Close Browser
 
+camera-trials
+    [Setup]    browser_opening
+    Click Link    ${nasa-api-link}[en]
+    Input Text    ${sol-input}    0
+    test_camera    3    2
+    Input Text    ${sol-input}    1
+    test_camera    2    4
+    test_camera    4    8
+    test_camera    6    4
+    Input Text    ${sol-input}    21
+    test_camera    5    7
+
+
+
+    [Teardown]    Close Browser
+
 *** Keywords ***
 check_text-elements
     [Arguments]    ${language}
@@ -84,3 +101,14 @@ check_text-elements
     Element Text Should Be    xpath: //${central_content-div}//${camera-select-label}[locator]    ${camera-select-label}[${language}]
     Element Text Should Be    xpath: //${get-images-button}[locator]    ${get-images-button}[${language}]
     Element Text Should Be    xpath: //${get-images-button}[locator]//following-sibling::p    ${no_pictures_found}[${language}]
+
+test_camera
+    [Arguments]    ${camera-index}    ${expected_img-amount}
+    Select From List By Label    xpath: //${central_content-div}/${camera-select}    ${camera-option-texts}[${camera-index}]
+    Click Button    xpath: //${central_content-div}/${get-images-button}[locator]
+    Wait Until Element Is Visible    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img
+    FOR    ${i}    IN RANGE    ${expected_img-amount}
+        Element Attribute Value Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-${i}
+        Sleep    1
+    END
+    Element Attribute Value Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-0
