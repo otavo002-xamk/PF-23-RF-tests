@@ -2,15 +2,6 @@
 Library           SeleniumLibrary
 Resource          resources/resource.resource
 
-*** Variables ***
-${toggle-to-dark}    img[@alt="moon"]
-${toggle-to-light}    img[@alt="sun"]
-@{navbar-items}    &{mathgame-item}    &{nasa-api-item}    &{sample3-item}    &{sample4-item}
-&{mathgame-item}    path=MathGame    en=Math Game    fi=Matikkapeli
-&{nasa-api-item}    path=nasaAPI    en=NASA API    fi=NASA API
-&{sample3-item}    path=sample3    en=Sample 3    fi=Näyte 3
-&{sample4-item}    path=sample4    en=Sample 4    fi=Näyte 4
-
 *** Test Cases ***
 homepage-button
     [Setup]    browser_opening
@@ -18,16 +9,16 @@ homepage-button
     Click Link    link: ${navbar-links}[sample_3][en]
     Element Text Should Be    xpath: //${central_content-div}/h1    ${sample3-title}
     Element Should Not Be Visible    xpath: //img[@alt="slideshow-0"]
-    Click Image    xpath: //${logo}
+    Click Image    xpath: //${header}/${top-left-corner}//${logo}
     frontpage_opening
     [Teardown]    Close Browser
 
 theme-toggler
     [Setup]    browser_opening
     Element Attribute Value Should Be    tag:body    class    \
-    Click Image    xpath: //${toggle-to-dark}
+    Click Image    xpath: //${header}/${top-right-corner}//${toggle-to-dark}
     Element Attribute Value Should Be    tag:body    class    dark
-    Click Image    xpath: //${toggle-to-light}
+    Click Image    xpath: //${header}/${top-right-corner}//${toggle-to-light}
     Element Attribute Value Should Be    tag:body    class    \
     [Teardown]    Close Browser
 
@@ -51,10 +42,10 @@ frontpage_opening
 this_flag_should_be_visible
     [Arguments]    ${flag}
     IF    ${flag} == "en"
-        Element Should Be Visible    xpath: //${english-flag}
+        Element Should Be Visible    xpath: //${header}/${top-right-corner}//${english-flag}
         Element Should Not Be Visible    xpath: //${finnish-flag}
     ELSE
-        Element Should Be Visible    xpath: //${finnish-flag}
+        Element Should Be Visible    xpath: //${header}/${top-right-corner}//${finnish-flag}
         Element Should Not Be Visible    xpath: //${english-flag}
     END
 

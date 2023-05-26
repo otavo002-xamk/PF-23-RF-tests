@@ -15,6 +15,14 @@ ${central_content-div}    div[@class="p-12 lg:p-0"]
 &{sample4-link}    en=Sample 4    fi=Näyte 4    path=sample4
 &{navbar-links}    math_game=${math-game-link}    nasa_api=${nasa-api-link}    sample_3=${sample3-link}    sample_4=${sample4-link}
 ${sample3-title}    Sample 3!
+${toggle-to-dark}    img[@alt="moon"]
+${toggle-to-light}    img[@alt="sun"]
+${header}         div[@class="p-2 bg-header bg-cover absolute w-full bg-red-600 h-40 shadow-header"]
+${top-left-corner}    div[@class="float-left"]
+${top-right-corner}    div[@class="float-right"]
+
+
+
 
 *** Keywords ***
 browser_opening
