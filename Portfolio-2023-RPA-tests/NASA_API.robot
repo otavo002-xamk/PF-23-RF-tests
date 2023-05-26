@@ -18,6 +18,7 @@ ${pause-slider-btn}    button/img[@alt="pause-slider-button"]
 ${following-sibling_curiosity-minislider-div}    following-sibling::div
 
 
+
 *** Test Cases ***
 checking_components
     [Setup]    browser_opening
@@ -25,13 +26,13 @@ checking_components
     Click Link    link: ${navbar-links}[nasa_api][en]
     Element Attribute Value Should Be    ${sol-input}    placeholder    122
     FOR    ${i}    IN RANGE    9
-        Element Text Should Be    xpath: //${camera-select}/option[${i+1}]    ${camera-option-texts}[${i}]
+        Element Text Should Be    xpath: //${central_content-div}/${camera-select}/option[${i+1}]    ${camera-option-texts}[${i}]
     END
     Element Should Not Be Visible    xpath: //${nasa-api-loader}
     Element Should Not Be Visible    xpath: //${get-images-button}[locator]//following-sibling::p
     Click Element    xpath: //${central_content-div}//${get-images-button}[locator]
-    Element Should Be Visible    xpath: //${central_content-div}//${nasa-api-loader}
-    Wait Until Element Is Not Visible    xpath: //${central_content-div}//${nasa-api-loader}
+    Element Should Be Visible    xpath: //${central_content-div}/${nasa-api-loader}
+    Wait Until Element Is Not Visible    xpath: //${central_content-div}/${nasa-api-loader}
     check_text-elements    en
     select_other_language    'fi'
     check_text-elements    fi
@@ -44,12 +45,12 @@ invalid_sol
     Click Link    ${nasa-api-link}[en]
     Input Text    ${sol-input}    3496
     Element Should Not Be Visible    ${get-images-button}[locator]//following-sibling::p
-    Click Button    xpath: //${central_content-div}//${get-images-button}[locator]
-    Element Text Should Be    xpath: //${central_content-div}//${get-images-button}[locator]//following-sibling::p    ${too_big_number}[en]
+    Click Button    xpath: //${central_content-div}/${get-images-button}[locator]
+    Element Text Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/following-sibling::p    ${too_big_number}[en]
     select_other_language    'fi'
-    Element Text Should Be    xpath: //${central_content-div}//${get-images-button}[locator]//following-sibling::p    ${too_big_number}[fi]
+    Element Text Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/following-sibling::p    ${too_big_number}[fi]
     select_other_language    'en'
-    Element Text Should Be    xpath: //${central_content-div}//${get-images-button}[locator]//following-sibling::p    ${too_big_number}[en]
+    Element Text Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/following-sibling::p    ${too_big_number}[en]
     [Teardown]    Close Browser
 
 curiosity-minislider
@@ -60,21 +61,21 @@ curiosity-minislider
     Element Should Not Be Visible    xpath: //${get-images-button}[locator]//${following-sibling_curiosity-minislider-div}
     Click Button    xpath: //${central_content-div}/${get-images-button}[locator]
     Element Should Be Visible    xpath: //${central_content-div}/${nasa-api-loader}
-    Wait Until Element Is Not Visible    xpath: //${nasa-api-loader}
-    Element Should Be Visible    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${pause-slider-btn}
+    Wait Until Element Is Not Visible    xpath: //${nasa-api-loader}    8
+    Element Should Be Visible    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${pause-slider-btn}
     FOR    ${i}    IN RANGE    ${10}
-        Element Attribute Value Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-${i}
+        Element Attribute Value Should Be    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-${i}
         Sleep    1
     END
-    Element Attribute Value Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-0
+    Element Attribute Value Should Be    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-0
     Element Should Not Be Visible    xpath: //${play-slider-btn}
-    Click Element    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${pause-slider-btn}
-    Element Should Not Be Visible    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${pause-slider-btn}
+    Click Element    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${pause-slider-btn}
+    Element Should Not Be Visible    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${pause-slider-btn}
     Sleep    2
-    Element Attribute Value Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-0
-    Click Element    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${play-slider-btn}
+    Element Attribute Value Should Be    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-0
+    Click Element    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${play-slider-btn}
     Sleep    1
-    Element Attribute Value Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-1
+    Element Attribute Value Should Be    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-1
     [Teardown]    Close Browser
 
 camera-trials
@@ -88,27 +89,24 @@ camera-trials
     test_camera    6    4
     Input Text    ${sol-input}    21
     test_camera    5    7
-
-
-
     [Teardown]    Close Browser
 
 *** Keywords ***
 check_text-elements
     [Arguments]    ${language}
-    Element Text Should Be    xpath: //${central_content-div}//${content-title}    ${nasa-api-title}
-    Element Text Should Be    xpath: //${central_content-div}//${sol-input-label}[locator]    ${sol-input-label}[${language}]
-    Element Text Should Be    xpath: //${central_content-div}//${camera-select-label}[locator]    ${camera-select-label}[${language}]
-    Element Text Should Be    xpath: //${get-images-button}[locator]    ${get-images-button}[${language}]
+    Element Text Should Be    xpath: //${central_content-div}/h1    ${nasa-api-title}
+    Element Text Should Be    xpath: //${central_content-div}/${sol-input-label}[locator]    ${sol-input-label}[${language}]
+    Element Text Should Be    xpath: //${central_content-div}/${camera-select-label}[locator]    ${camera-select-label}[${language}]
+    Element Text Should Be    xpath: //${central_content-div}/${get-images-button}[locator]    ${get-images-button}[${language}]
     Element Text Should Be    xpath: //${get-images-button}[locator]//following-sibling::p    ${no_pictures_found}[${language}]
 
 test_camera
     [Arguments]    ${camera-index}    ${expected_img-amount}
     Select From List By Label    xpath: //${central_content-div}/${camera-select}    ${camera-option-texts}[${camera-index}]
     Click Button    xpath: //${central_content-div}/${get-images-button}[locator]
-    Wait Until Element Is Visible    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img
+    Wait Until Element Is Visible    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img
     FOR    ${i}    IN RANGE    ${expected_img-amount}
-        Element Attribute Value Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-${i}
+        Element Attribute Value Should Be    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-${i}
         Sleep    1
     END
-    Element Attribute Value Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-0
+    Element Attribute Value Should Be    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-0

@@ -8,6 +8,7 @@ ${indicator-class-active}    react-any-slider-dots__dot react-any-slider-dots__d
 
 
 
+
 *** Test Cases ***
 arrow-buttons
     [Setup]    browser_opening
@@ -17,7 +18,7 @@ arrow-buttons
         END
         Click Button    xpath://button[@data-testid="slider-next-button"]
     END
-    Element Should Be Visible    ${first_slide}
+    Element Should Be Visible    xpath: //img[@alt="slideshow-0"]
     FOR    ${i}    IN RANGE    ${8}
         Click Button    xpath://button[@data-testid="slider-prev-button"]
         FOR    ${j}    IN RANGE    ${8}
@@ -48,7 +49,7 @@ automatic_slide-change
         END
             Wait Until Element Is Not Visible    xpath: //img[@alt="slideshow-${i}"]
     END
-    Element Should Be Visible    ${first_slide}
+    Element Should Be Visible    xpath: //img[@alt="slideshow-0"]
     [Teardown]    Close Browser
 
 *** Keywords ***

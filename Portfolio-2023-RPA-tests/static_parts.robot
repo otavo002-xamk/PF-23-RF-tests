@@ -3,35 +3,31 @@ Library           SeleniumLibrary
 Resource          resources/resource.resource
 
 *** Variables ***
-${toggle-to-dark}    xpath: //img[@alt="moon"]
-${toggle-to-light}    xpath: //img[@alt="sun"]
+${toggle-to-dark}    img[@alt="moon"]
+${toggle-to-light}    img[@alt="sun"]
 @{navbar-items}    &{mathgame-item}    &{nasa-api-item}    &{sample3-item}    &{sample4-item}
 &{mathgame-item}    path=MathGame    en=Math Game    fi=Matikkapeli
 &{nasa-api-item}    path=nasaAPI    en=NASA API    fi=NASA API
 &{sample3-item}    path=sample3    en=Sample 3    fi=Näyte 3
 &{sample4-item}    path=sample4    en=Sample 4    fi=Näyte 4
 
-
-
-
-
 *** Test Cases ***
 homepage-button
     [Setup]    browser_opening
     frontpage_opening
     Click Link    link: ${navbar-links}[sample_3][en]
-    Element Should Be Visible    ${sample3_title}
-    Element Should Not Be Visible    ${first_slide}
-    Click Image    ${logo}
+    Element Text Should Be    xpath: //${central_content-div}/h1    ${sample3-title}
+    Element Should Not Be Visible    xpath: //img[@alt="slideshow-0"]
+    Click Image    xpath: //${logo}
     frontpage_opening
     [Teardown]    Close Browser
 
 theme-toggler
     [Setup]    browser_opening
     Element Attribute Value Should Be    tag:body    class    \
-    Click Image    ${toggle-to-dark}
+    Click Image    xpath: //${toggle-to-dark}
     Element Attribute Value Should Be    tag:body    class    dark
-    Click Image    ${toggle-to-light}
+    Click Image    xpath: //${toggle-to-light}
     Element Attribute Value Should Be    tag:body    class    \
     [Teardown]    Close Browser
 
@@ -49,17 +45,17 @@ language-toggler
 
 *** Keywords ***
 frontpage_opening
-    Element Should Be Visible    ${first_slide}
-    Element Should Not Be Visible    ${sample3_title}
+    Element Should Be Visible    xpath: //img[@alt="slideshow-0"]
+    Element Should Not Be Visible    ${central_content-div}
 
 this_flag_should_be_visible
     [Arguments]    ${flag}
     IF    ${flag} == "en"
-        Element Should Be Visible    ${english-flag}
-        Element Should Not Be Visible    ${finnish-flag}
+        Element Should Be Visible    xpath: //${english-flag}
+        Element Should Not Be Visible    xpath: //${finnish-flag}
     ELSE
-        Element Should Be Visible    ${finnish-flag}
-        Element Should Not Be Visible    ${english-flag}
+        Element Should Be Visible    xpath: //${finnish-flag}
+        Element Should Not Be Visible    xpath: //${english-flag}
     END
 
 check_menu_items

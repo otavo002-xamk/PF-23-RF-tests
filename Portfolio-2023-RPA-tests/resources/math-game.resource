@@ -23,22 +23,23 @@ ${equation-div-4}    div[@data-testid="equation-4"]
 ${progress-bar}    div[@class="progressbar-progress"]
 &{u_did_it}       locator=h2[text()="YOU DID IT!!!" or text()="KAIKKI OIKEIN!!!"]    en=YOU DID IT!!!    fi=KAIKKI OIKEIN!!!
 
+
 *** Keywords ***
 calculate_sum
     [Arguments]    ${equation-number}
     [Documentation]    calculates sum from three random numbers
-    ${random1}    Get Text    xpath: //div[@data-testid="random-number-${equation-number}-0"]
-    ${random2}    Get Text    xpath: //div[@data-testid="random-number-${equation-number}-1"]
-    ${random3}    Get Text    xpath: //div[@data-testid="random-number-${equation-number}-2"]
+    ${random1}=    Get Text    xpath: //div[@data-testid="random-number-${equation-number}-0"]
+    ${random2}=    Get Text    xpath: //div[@data-testid="random-number-${equation-number}-1"]
+    ${random3}=    Get Text    xpath: //div[@data-testid="random-number-${equation-number}-2"]
     ${sum}    evaluate    ${random1}+${random2}+${random3}
     [Return]    ${sum}
 
 check_start-page-elements
     [Arguments]    ${language}
     [Documentation]    The keyword checks the start-page elements in the math game. Language is given as argument.
-    Element Text Should Be    xpath: //${central_content-div}//${math-game-title}[locator]    ${math-game-title}[${language}]
-    Element Text Should Be    xpath: //${central_content-div}//${ready?}[locator]    ${ready?}[${language}]
-    Element Text Should Be    xpath: //${central_content-div}//${start-button}[locator]    ${start-button}[${language}]
+    Element Text Should Be    xpath: //${central_content-div}/${math-game-title}[locator]    ${math-game-title}[${language}]
+    Element Text Should Be    xpath: //${central_content-div}/${ready?}[locator]    ${ready?}[${language}]
+    Element Text Should Be    xpath: //${central_content-div}/${start-button}[locator]    ${start-button}[${language}]
 
 check_equation-elements
     [Arguments]    ${equation-number}
@@ -58,9 +59,9 @@ check_equation-elements
             IF    ${i} == ${equation-number}
                 Element Should Be Visible    xpath: //${central_content-div}//${options-table-${i}}
                 FOR    ${j}    IN RANGE    ${3}
-                    Element Should Be Visible    xpath: //${central_content-div}//div[@data-testid="random-number-${i}-${j}"]
+                    Element Should Be Visible    xpath: //div[@data-testid="random-number-${i}-${j}"]
                 END
-                Element Should Be Visible    xpath: //${central_content-div}//${equation-div-${i}}//${progress-bar}
+                Element Should Be Visible    xpath: //${central_content-div}/${equation-div-${i}}//${progress-bar}
             ELSE
                 Element Should Not Be Visible    ${options-table-${i}}
                 FOR    ${j}    IN RANGE    ${3}
@@ -74,26 +75,26 @@ check_equation-elements
 check_elements_after_start
     [Arguments]    ${equation-number}
     [Documentation]    The keyword checks the elements of math game right after starting every new equation. The equation number is given as argument.
-    Element Should Be Visible    xpath: //${central_content-div}//${math-game-title}[locator]
-    Element Should Not Be Visible    xpath: //${central_content-div}//${ready?}[locator]
-    Element Text Should Be    xpath: //${central_content-div}//${start-over-button}[locator]    ${start-over-button}[en]
+    Element Should Be Visible    xpath: //${central_content-div}/${math-game-title}[locator]
+    Element Should Not Be Visible    xpath: //${ready?}[locator]
+    Element Text Should Be    xpath: //${central_content-div}/${start-over-button}[locator]    ${start-over-button}[en]
     Element Should Contain    xpath: //${central_content-div}//${status}[locator]    ${status}[en]
     select_other_language    'fi'
-    Element Text Should Be    xpath: //${central_content-div}//${start-over-button}[locator]    ${start-over-button}[fi]
+    Element Text Should Be    xpath: //${central_content-div}/${start-over-button}[locator]    ${start-over-button}[fi]
     Element Should Contain    xpath: //${central_content-div}//${status}[locator]    Aikaa jäljellä
     select_other_language    'en'
-    Element Text Should Be    xpath: //${central_content-div}//${start-over-button}[locator]    ${start-over-button}[en]
+    Element Text Should Be    xpath: //${central_content-div}/${start-over-button}[locator]    ${start-over-button}[en]
     Element Should Contain    xpath: //${central_content-div}//${status}[locator]    ${status}[en]
     check_equation-elements    ${equation-number}
     Element Should Not Be Visible    xpath: //${result}
-    Element Should Be Disabled    xpath: //${central_content-div}//${math-game-bottom}//button[text()= "NEXT ❯"]
+    Element Should Be Disabled    xpath: //${math-game-bottom}/button[text()= "NEXT ❯"]
 
 check_correct-count
     [Arguments]    ${sum}    ${equation-number}
     [Documentation]    The keyword checks count of correct numbers in the options table and ensures that there's also the same count of correct symbols that are also in the same table cells with the correct numbers. This is needed for there is a small possibility that there's by accident more than one correct numbers in the table. The sum and equation number are given as arguments.
     ${correct_count}=    Get Element Count    xpath: //${options-table-${equation-number}}//td[text()="${sum}"]
     ${correct_symbol-count}=    Get Element Count    xpath: //${options-table-${equation-number}}//img[@alt="correct"]
-    ${correct_symbol_&_count}=    Get Element Count    xpath: //${options-table-${equation-number}}//td[text()="${sum}"]//img[@alt="correct"]
+    ${correct_symbol_&_count}=    Get Element Count    xpath: //${options-table-${equation-number}}//td[text()="${sum}"]/img[@alt="correct"]
     Wait For Condition    return ${correct_count} == ${correct_symbol-count}
     Wait For Condition    return ${correct_count} == ${correct_symbol_&_count}
 
@@ -102,31 +103,31 @@ check_false-count
     [Documentation]    The keyword checks that there's only one incorrect-symbol in the options-table and that it's in the same table cell with the table cell that is clicked. The option index (i.e. the table-cell that is clicked) and equation number are given as arguments.
     ${false-count}=    Get Element Count    xpath: //${options-table-${equation-number}}//img[@alt="incorrect"]
     Wait For Condition    return ${false-count} == 1
-    Element Should Be Visible    xpath: //${options-table-${equation-number}}//td[@data-testid="equation-options-table-td-${equation-number}-${option-index}"]//img[@alt="incorrect"]
+    Element Should Be Visible    xpath: //${options-table-${equation-number}}//td[@data-testid="equation-options-table-td-${equation-number}-${option-index}"]/img[@alt="incorrect"]
 
 check_result_&_click_next
     [Arguments]    ${result-message}    ${equation-number}
     [Documentation]    The keyword checks the equation elements in the mathgame after the options-table has been clicked and the result is shown. Then the NEXT-button will be clicked. The english and finnish result text and equation number are given as arguments.
     Element Should Not Be Visible    xpath: //${status}[locator]
-    Element Text Should Be    xpath: //${central_content-div}//${equation-div-${equation-number}}//p    ${result-message}[en]
+    Element Text Should Be    xpath: //${central_content-div}/${equation-div-${equation-number}}/p    ${result-message}[en]
     select_other_language    'fi'
-    Element Text Should Be    xpath: //${central_content-div}//${equation-div-${equation-number}}//p    ${result-message}[fi]
+    Element Text Should Be    xpath: //${central_content-div}/${equation-div-${equation-number}}/p    ${result-message}[fi]
     select_other_language    'en'
-    Element Text Should Be    xpath: //${central_content-div}//${equation-div-${equation-number}}//p    ${result-message}[en]
+    Element Text Should Be    xpath: //${central_content-div}/${equation-div-${equation-number}}/p    ${result-message}[en]
     check_equation-elements    ${equation-number}
-    Click Button    xpath: //${central_content-div}//${math-game-bottom}//button[text()="NEXT ❯"]
+    Click Button    xpath: //${math-game-bottom}/button[text()="NEXT ❯"]
 
 click_correct
     [Arguments]    ${equation-number}
     ${sum}    calculate_sum    ${equation-number}
-    Click Element    xpath: //${central_content-div}//${equation-div-${equation-number}}//${options-table-${equation-number}}//td[text()="${sum}"]
+    Click Element    xpath: //${options-table-${equation-number}}//td[text()="${sum}"]
     [Return]    ${sum}
 
 check_all_result-texts
     [Arguments]    ${language}
-    Element Text Should Be    xpath: //div[@data-testid="equation-0"]//p    ${correct}[${language}]
-    Element Text Should Be    xpath: //div[@data-testid="equation-1"]//p    ${incorrect}[${language}]
-    Element Text Should Be    xpath: //div[@data-testid="equation-2"]//p    ${time_ended}[${language}]
-    Element Text Should Be    xpath: //div[@data-testid="equation-3"]//p    ${correct}[${language}]
-    Element Text Should Be    xpath: //div[@data-testid="equation-4"]//p    ${correct}[${language}]
+    Element Text Should Be    xpath: //${central_content-div}/${equation-div-0}/p    ${correct}[${language}]
+    Element Text Should Be    xpath: //${central_content-div}/${equation-div-1}/p    ${incorrect}[${language}]
+    Element Text Should Be    xpath: //${central_content-div}/${equation-div-2}/p    ${time_ended}[${language}]
+    Element Text Should Be    xpath: //${central_content-div}/${equation-div-3}/p    ${correct}[${language}]
+    Element Text Should Be    xpath: //${central_content-div}/${equation-div-4}/p    ${correct}[${language}]
     Element Text Should Be    xpath: //${end-results}[locator]    ${end-results}[${language}]: 3 / 5
