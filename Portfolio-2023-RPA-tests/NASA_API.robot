@@ -19,9 +19,11 @@ ${following-sibling_curiosity-minislider-div}    following-sibling::div
 
 
 
+
+
 *** Test Cases ***
 checking_components
-    [Setup]    browser_opening
+    [Setup]    ${browser-opening}
     Element Should Not Be Visible    xpath: //${central_content-div}
     Click Link    link: ${navbar-links}[nasa_api][en]
     Element Attribute Value Should Be    ${sol-input}    placeholder    122
@@ -41,7 +43,7 @@ checking_components
     [Teardown]    Close Browser
 
 invalid_sol
-    [Setup]    browser_opening
+    [Setup]    ${browser-opening}
     Click Link    ${nasa-api-link}[en]
     Input Text    ${sol-input}    3496
     Element Should Not Be Visible    ${get-images-button}[locator]//following-sibling::p
@@ -54,7 +56,7 @@ invalid_sol
     [Teardown]    Close Browser
 
 curiosity-minislider
-    [Setup]    browser_opening
+    [Setup]    ${browser-opening}
     Click Link    ${nasa-api-link}[en]
     Input Text    ${sol-input}    1444
     Element Should Not Be Visible    xpath: //${nasa-api-loader}
@@ -79,7 +81,7 @@ curiosity-minislider
     [Teardown]    Close Browser
 
 camera-trials
-    [Setup]    browser_opening
+    [Setup]    ${browser-opening}
     Click Link    ${nasa-api-link}[en]
     Input Text    ${sol-input}    0
     test_camera    3    2

@@ -20,12 +20,11 @@ ${toggle-to-light}    img[@alt="sun"]
 ${header}         div[@class="p-2 bg-header bg-cover absolute w-full bg-red-600 h-40 shadow-header"]
 ${top-left-corner}    div[@class="float-left"]
 ${top-right-corner}    div[@class="float-right"]
-
-
+${browser-opening}    full-width_opening
 
 
 *** Keywords ***
-browser_opening
+full-width_opening
     Open Browser    http://localhost:3000    firefox
     Maximize Browser Window
 
@@ -37,3 +36,9 @@ select_other_language
     ELSE
         Click Image    xpath: //${fin-flag-dropdown-item}
     END
+
+small-width_opening
+    Open Browser    http://localhost:3000    firefox
+    Set Window Size    1023    952
+    Set Window Position    0    0
+    Click Element    xpath: //div[@data-testid="menu-container"]

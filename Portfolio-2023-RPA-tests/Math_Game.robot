@@ -6,12 +6,9 @@ Resource          resources/math-game.resource
 *** Variables ***
 
 
-
-
-
 *** Test Cases ***
 checking_components
-    [Setup]    browser_opening
+    [Setup]    ${browser-opening}
     Element Should Not Be Visible    xpath: //${central_content-div}
     Click Link    link: ${navbar-links}[math_game][en]
     check_start-page-elements    en
@@ -76,7 +73,7 @@ checking_components
     [Teardown]    Close Browser
 
 choosing_correctly
-    [Setup]    browser_opening
+    [Setup]    ${browser-opening}
     Click Link    link: ${math-game-link}[en]
     Click Button    xpath: //${central_content-div}/${start-button}[locator]
     FOR    ${i}    IN RANGE    ${5}

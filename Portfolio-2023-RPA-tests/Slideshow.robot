@@ -9,9 +9,11 @@ ${indicator-class-active}    react-any-slider-dots__dot react-any-slider-dots__d
 
 
 
+
+
 *** Test Cases ***
 arrow-buttons
-    [Setup]    browser_opening
+    [Setup]    ${browser-opening}
     FOR    ${i}    IN RANGE    ${8}
         FOR    ${j}    IN RANGE    ${8}
             check_correct_slideshow-index_is_visible    ${i}    ${j}
@@ -28,7 +30,7 @@ arrow-buttons
     [Teardown]    Close Browser
 
 indicators
-    [Setup]    browser_opening
+    [Setup]    ${browser-opening}
     FOR    ${i}    IN RANGE    ${8}
         Click Element    id:sliderdot${i}
         FOR    ${j}    IN RANGE    ${8}
@@ -38,12 +40,12 @@ indicators
     [Teardown]    Close Browser
 
 automatic_slide-change
-    [Setup]    browser_opening
+    [Setup]    ${browser-opening}
     FOR    ${i}    IN RANGE    ${8}
         FOR    ${j}    IN RANGE    ${8}
             check_correct_slideshow-index_is_visible    ${i}    ${j}
         END
-            Builtin.Sleep    4s
+            Builtin.Sleep    3s
         FOR    ${j}    IN RANGE    ${8}
             check_correct_slideshow-index_is_visible    ${i}    ${j}
         END
