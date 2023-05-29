@@ -21,8 +21,10 @@ ${following-sibling_curiosity-minislider-div}    following-sibling::div
 
 
 
+
 *** Test Cases ***
 checking_components
+    [Documentation]    checks all the start components of the NASA API -page without going deeper to the functionalities of it
     [Setup]    ${browser-opening}
     Element Should Not Be Visible    xpath: //${central_content-div}
     Click Link    link: ${navbar-links}[nasa_api][en]
@@ -43,6 +45,7 @@ checking_components
     [Teardown]    Close Browser
 
 invalid_sol
+    [Documentation]    checks the error-message when too large value is inserted to the sol-input
     [Setup]    ${browser-opening}
     Click Link    ${nasa-api-link}[en]
     Input Text    ${sol-input}    3496
@@ -56,6 +59,7 @@ invalid_sol
     [Teardown]    Close Browser
 
 curiosity-minislider
+    [Documentation]    The test checks that the curiosity-minislider works as expected. With the given sol-value it should show 10 pictures. Also pause-button should stop the slider and change to a play button.
     [Setup]    ${browser-opening}
     Click Link    ${nasa-api-link}[en]
     Input Text    ${sol-input}    1444
@@ -81,6 +85,7 @@ curiosity-minislider
     [Teardown]    Close Browser
 
 camera-trials
+    [Documentation]    checks that selecting different camera options work as expected
     [Setup]    ${browser-opening}
     Click Link    ${nasa-api-link}[en]
     Input Text    ${sol-input}    0
@@ -96,6 +101,7 @@ camera-trials
 *** Keywords ***
 check_text-elements
     [Arguments]    ${language}
+    [Documentation]    checks the text elements are correct and in the language that is given in arguments
     Element Text Should Be    xpath: //${central_content-div}/h1    ${nasa-api-title}
     Element Text Should Be    xpath: //${central_content-div}/${sol-input-label}[locator]    ${sol-input-label}[${language}]
     Element Text Should Be    xpath: //${central_content-div}/${camera-select-label}[locator]    ${camera-select-label}[${language}]
@@ -104,6 +110,7 @@ check_text-elements
 
 test_camera
     [Arguments]    ${camera-index}    ${expected_img-amount}
+    [Documentation]    The keyword first selects from the camera-select the one that corresponds to the camera-index given in arguments. It then gets the pictures and checks that the amount matches to the expected img amount given as the second argument.
     Select From List By Label    xpath: //${central_content-div}/${camera-select}    ${camera-option-texts}[${camera-index}]
     Click Button    xpath: //${central_content-div}/${get-images-button}[locator]
     Wait Until Element Is Visible    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img

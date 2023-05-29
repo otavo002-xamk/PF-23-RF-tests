@@ -24,6 +24,7 @@ ${progress-bar}    div[@class="progressbar-progress"]
 &{u_did_it}       locator=h2[text()="YOU DID IT!!!" or text()="KAIKKI OIKEIN!!!"]    en=YOU DID IT!!!    fi=KAIKKI OIKEIN!!!
 
 
+
 *** Keywords ***
 calculate_sum
     [Arguments]    ${equation-number}
@@ -119,12 +120,14 @@ check_result_&_click_next
 
 click_correct
     [Arguments]    ${equation-number}
+    [Documentation]    The keyword takes an equation-number as argument and then calculates sum of the random numbers and clicks the correct option from the options table.
     ${sum}    calculate_sum    ${equation-number}
     Click Element    xpath: //${options-table-${equation-number}}//td[text()="${sum}"]
     [Return]    ${sum}
 
 check_all_result-texts
     [Arguments]    ${language}
+    [Documentation]    checks the texts in the results page are as expected and in the language that is given as argument
     Element Text Should Be    xpath: //${central_content-div}/${equation-div-0}/p    ${correct}[${language}]
     Element Text Should Be    xpath: //${central_content-div}/${equation-div-1}/p    ${incorrect}[${language}]
     Element Text Should Be    xpath: //${central_content-div}/${equation-div-2}/p    ${time_ended}[${language}]

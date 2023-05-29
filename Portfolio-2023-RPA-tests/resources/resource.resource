@@ -20,16 +20,17 @@ ${toggle-to-light}    img[@alt="sun"]
 ${header}         div[@class="p-2 bg-header bg-cover absolute w-full bg-red-600 h-40 shadow-header"]
 ${top-left-corner}    div[@class="float-left"]
 ${top-right-corner}    div[@class="float-right"]
-${browser-opening}    full-width_opening
-
+${browser-opening}    small-width_opening
 
 *** Keywords ***
 full-width_opening
+    [Documentation]    opens the browser and maximizes the browser window in full-screen width
     Open Browser    http://localhost:3000    firefox
     Maximize Browser Window
 
 select_other_language
     [Arguments]    ${language}    # 'en' for english and 'fi' for finnish
+    [Documentation]    uses the language-dropdown-icon in the top-right corner of the page and selects the language that is given as argument
     Click Element    ${dropdown-icon}
     IF    ${language} == 'en'
         Click Image    xpath: //${eng-flag-dropdown-item}
@@ -38,6 +39,7 @@ select_other_language
     END
 
 small-width_opening
+    [Documentation]    opens the browser, then shrinks the browser width so that the responsive layout changes, then opens the navbar-menu
     Open Browser    http://localhost:3000    firefox
     Set Window Size    1023    952
     Set Window Position    0    0

@@ -5,9 +5,9 @@ Resource          resources/math-game.resource
 
 *** Variables ***
 
-
 *** Test Cases ***
 checking_components
+    [Documentation]    Math Game is started and played through. The elements are checked that they are visible in the correct places and that the languages change as well. Both correct and incorrect choices are tested that they produce the expected results and messages.
     [Setup]    ${browser-opening}
     Element Should Not Be Visible    xpath: //${central_content-div}
     Click Link    link: ${navbar-links}[math_game][en]
@@ -73,6 +73,7 @@ checking_components
     [Teardown]    Close Browser
 
 choosing_correctly
+    [Documentation]    Math Game is played through by clicking correct option in every equation. Then the results are checked.
     [Setup]    ${browser-opening}
     Click Link    link: ${math-game-link}[en]
     Click Button    xpath: //${central_content-div}/${start-button}[locator]
