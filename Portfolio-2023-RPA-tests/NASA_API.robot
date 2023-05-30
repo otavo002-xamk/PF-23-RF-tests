@@ -18,10 +18,6 @@ ${pause-slider-btn}    button/img[@alt="pause-slider-button"]
 ${following-sibling_curiosity-minislider-div}    following-sibling::div
 
 
-
-
-
-
 *** Test Cases ***
 checking_components
     [Documentation]    checks all the start components of the NASA API -page without going deeper to the functionalities of it
@@ -34,7 +30,7 @@ checking_components
     END
     Element Should Not Be Visible    xpath: //${nasa-api-loader}
     Element Should Not Be Visible    xpath: //${get-images-button}[locator]//following-sibling::p
-    Click Element    xpath: //${central_content-div}//${get-images-button}[locator]
+    Click Element    xpath: //${central_content-div}/${get-images-button}[locator]
     Element Should Be Visible    xpath: //${central_content-div}/${nasa-api-loader}
     Wait Until Element Is Not Visible    xpath: //${central_content-div}/${nasa-api-loader}
     check_text-elements    en
@@ -76,7 +72,7 @@ curiosity-minislider
     Element Attribute Value Should Be    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-0
     Element Should Not Be Visible    xpath: //${play-slider-btn}
     Click Element    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${pause-slider-btn}
-    Element Should Not Be Visible    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${pause-slider-btn}
+    Element Should Not Be Visible    xpath: //${pause-slider-btn}
     Sleep    2
     Element Attribute Value Should Be    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-0
     Click Element    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/${play-slider-btn}

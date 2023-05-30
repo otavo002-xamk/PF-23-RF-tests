@@ -3,8 +3,6 @@ Library           SeleniumLibrary
 Resource          resources/resource.resource
 Resource          resources/math-game.resource
 
-*** Variables ***
-
 *** Test Cases ***
 checking_components
     [Documentation]    Math Game is started and played through. The elements are checked that they are visible in the correct places and that the languages change as well. Both correct and incorrect choices are tested that they produce the expected results and messages.
