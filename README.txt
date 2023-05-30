@@ -1,4 +1,4 @@
-﻿Robot Framework tests for Portfolio 2023
+﻿Robot Framework tests for Portfolio 2023. Run Robot Framework tests with full-sized window by setting the ${browser-opening} -variable to value full-width_opening (default). Run with small-sized window by setting it to small-width_opening.
 
 Copyright 2023 Tapani Voutilainen
 

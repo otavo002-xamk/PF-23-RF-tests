@@ -18,6 +18,7 @@ ${pause-slider-btn}    button/img[@alt="pause-slider-button"]
 ${following-sibling_curiosity-minislider-div}    following-sibling::div
 
 
+
 *** Test Cases ***
 checking_components
     [Documentation]    checks all the start components of the NASA API -page without going deeper to the functionalities of it
@@ -109,7 +110,7 @@ test_camera
     [Documentation]    The keyword first selects from the camera-select the one that corresponds to the camera-index given in arguments. It then gets the pictures and checks that the amount matches to the expected img amount given as the second argument.
     Select From List By Label    xpath: //${central_content-div}/${camera-select}    ${camera-option-texts}[${camera-index}]
     Click Button    xpath: //${central_content-div}/${get-images-button}[locator]
-    Wait Until Element Is Visible    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img
+    Wait Until Element Is Visible    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    10
     FOR    ${i}    IN RANGE    ${expected_img-amount}
         Element Attribute Value Should Be    xpath: //${get-images-button}[locator]/${following-sibling_curiosity-minislider-div}/img    alt    curiosity-${i}
         Sleep    1
