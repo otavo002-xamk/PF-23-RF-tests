@@ -22,7 +22,6 @@ ${top-left-corner}    div[@class="float-left"]
 ${top-right-corner}    div[@class="float-right"]
 ${browser-opening}    full-width_opening
 
-
 *** Keywords ***
 full-width_opening
     [Documentation]    opens the browser and maximizes the browser window in full-screen width
@@ -34,9 +33,9 @@ select_other_language
     [Documentation]    uses the language-dropdown-icon in the top-right corner of the page and selects the language that is given as argument
     Click Element    ${dropdown-icon}
     IF    ${language} == 'en'
-        Click Image    xpath: //${eng-flag-dropdown-item}
+        Click Image    xpath: //${header}/${top-right-corner}//${eng-flag-dropdown-item}
     ELSE
-        Click Image    xpath: //${fin-flag-dropdown-item}
+        Click Image    xpath: //${header}/${top-right-corner}//${fin-flag-dropdown-item}
     END
 
 small-width_opening

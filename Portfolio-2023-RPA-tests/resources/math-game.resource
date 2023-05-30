@@ -23,8 +23,6 @@ ${equation-div-4}    div[@data-testid="equation-4"]
 ${progress-bar}    div[@class="progressbar-progress"]
 &{u_did_it}       locator=h2[text()="YOU DID IT!!!" or text()="KAIKKI OIKEIN!!!"]    en=YOU DID IT!!!    fi=KAIKKI OIKEIN!!!
 
-
-
 *** Keywords ***
 calculate_sum
     [Arguments]    ${equation-number}

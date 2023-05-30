@@ -6,12 +6,6 @@ Resource          resources/resource.resource
 ${indicator-class-non-active}    react-any-slider-dots__dot react-any-slider-dots__dot--big
 ${indicator-class-active}    react-any-slider-dots__dot react-any-slider-dots__dot--big react-any-slider-dots__dot--active
 
-
-
-
-
-
-
 *** Test Cases ***
 arrow-buttons
     [Documentation]    checks the arrow buttons in left and right move the slider to the next or previous slide
