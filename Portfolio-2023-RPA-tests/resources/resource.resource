@@ -23,6 +23,7 @@ ${top-right-corner}    div[@class="float-right"]
 ${browser-opening}    full-width_opening
 
 
+
 *** Keywords ***
 full-width_opening
     [Documentation]    opens the browser and maximizes the browser window in full-screen width
