@@ -32,6 +32,14 @@ language-toggler
     [Documentation]    checks the language toggler in the top-right corner works as expected and changes the language of the page
     [Setup]    ${browser-opening}
     this_flag_should_be_visible    "en"
+    Element Should Not Be Visible    xpath: //${eng-flag-dropdown-item}
+    Element Should Not Be Visible    xpath: //${fin-flag-dropdown-item}
+    Click Element    ${dropdown-icon}
+    Element Should Be Visible    xpath: //${header}/${top-right-corner}//${eng-flag-dropdown-item}
+    Element Should Be Visible    xpath: //${header}/${top-right-corner}//${fin-flag-dropdown-item}
+    Click Element    ${dropdown-icon}
+    Element Should Not Be Visible    xpath: //${eng-flag-dropdown-item}
+    Element Should Not Be Visible    xpath: //${fin-flag-dropdown-item}
     check_menu_items    en
     select_other_language    "fi"
     this_flag_should_be_visible    "fi"
