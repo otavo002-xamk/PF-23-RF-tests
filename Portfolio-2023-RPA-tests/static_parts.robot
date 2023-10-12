@@ -7,12 +7,12 @@ homepage-button
     [Documentation]    checks the home-button-logo in the top-left corner works as expected and navigates to the front page
     [Setup]    ${browser-opening}
     frontpage_opening
-    ${navbar_is_not_visible?}=    Run Keyword And Return Status    Element Should Not Be Visible    link: ${navbar-links}[sample_3][en]
+    ${navbar_is_not_visible?}=    Run Keyword And Return Status    Element Should Not Be Visible    link: ${navbar-links}[data_base][en]
     IF    ${navbar_is_not_visible?}
         Click Element    xpath: //div[@data-testid="menu-container"]
     END
-    Click Link    link: ${navbar-links}[sample_3][en]
-    Element Text Should Be    xpath: //${central_content-div}/h1    ${sample3-title}
+    Click Link    link: ${navbar-links}[data_base][en]
+    Element Text Should Be    xpath: //${central_content-div}/h1    ${database-title}
     Element Should Not Be Visible    xpath: //img[@alt="slideshow-0"]
     Click Image    xpath: //${header}/${top-left-corner}//${logo}
     frontpage_opening
