@@ -12,7 +12,7 @@ homepage-button
         Click Element    xpath: //div[@data-testid="menu-container"]
     END
     Click Link    link: ${navbar-links}[data_base][en]
-    Element Text Should Be    xpath: //${central_content-div}/h1    ${database-title}
+    Element Text Should Be    xpath: //${central_content-div}/${database-title}[locator]    ${database-title}[en]
     Element Should Not Be Visible    xpath: //img[@alt="slideshow-0"]
     Click Image    xpath: //${header}/${top-left-corner}//${logo}
     frontpage_opening
