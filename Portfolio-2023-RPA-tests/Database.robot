@@ -10,10 +10,12 @@ ${table-select}    select[@id="table-select"]
 ${db-table}       table[@data-testid="db-contents-table"]
 &{no-connection_warning}    en=No connection!    fi=Yhteyttä ei ole!
 &{no-data_warning}    en=no data    fi=ei dataa
+${empty_table-name}    billings
+${non-empty_table-name}    PriceLogs
 
 *** Test Cases ***
 dbtables&texts
-    [Documentation]    This test will open the database page by clicking it in the menu. It then checks the text-elements and the options in table-select-dropdown-menu. To make this test work it's up to user to save a json-file, which will include the dbtables information in the json-format in the jsonfiles-folder (more on this in the readme).
+    [Documentation]    This test will open the database page by clicking it in the menu. It then checks the text-elements and the options in table-select-dropdown-menu. The test compares the select-dropdown-menu-options to the values in the json file.
     [Setup]    ${browser-opening}
     Element Should Not Be Visible    xpath: //${central_content-div}
     Click Link    link: ${navbar-links}[data_base][en]
@@ -36,11 +38,11 @@ dbtables&texts
     [Teardown]    Close Browser
 
 table_items
-    [Documentation]    This test opens the database page by clicking it in the menu.
+    [Documentation]    This test opens the database page by clicking it in the menu. It first selects a database-table from the dropdown-select-menu. This sends a request to MySQL database, and then prints the result as a table to the page. Note, that the user must change the ${non-empty_table-name} to a different table name. Otherwise the test will fail. The test reads the json file located in the jsonfiles-folder if it exists and compares the values with the result in the table.
     [Setup]    ${browser-opening}
     Click Link    link: ${navbar-links}[data_base][en]
     Element Should Not Be Visible    xpath://${db-table}
-    Select From List By Label    xpath: //${central_content-div}/${table-select}    PriceLogs
+    Select From List By Label    xpath: //${central_content-div}/${table-select}    ${non-empty_table-name}
     Element Should Be Visible    xpath://${central_content-div}/${db-table}
     ${table-content_json}=    Load Json From File    ${CURDIR}${/}jsonfiles/table-content.json
     ${table-item}=    Get Value From Json    ${table-content_json}    [0]
@@ -57,12 +59,10 @@ table_items
             Element Should Be Visible    xpath://${central_content-div}/${db-table}/tbody/tr/th[text()="${value}"]
         END
     END
-
-
-
     [Teardown]    Close Browser
 
 with_no_connection
+    [Documentation]    This test checks all the text elements in the database page when the database connection is off. The back-end Portfolio-Server or the MySQL database has to be shut off before running this test.
     [Setup]    ${browser-opening}
     Click Link    link: ${navbar-links}[data_base][en]
     Element Should Not Be Visible    xpath://${db-table}
@@ -77,10 +77,11 @@ with_no_connection
     [Teardown]    Close Browser
 
 with_no_data
+    [Documentation]    This test will open the database page by clicking it in the menu. It then selects a table from the select-dropdown-menu. The aim is to test an empty table in the database and ensure that only a warning message is visible. Note, that the user must change the ${empty_table-name} to a different table name and the table must be empty.
     [Setup]    ${browser-opening}
     Click Link    link: ${navbar-links}[data_base][en]
     Element Should Not Be Visible    xpath://${db-table}
-    Select From List By Label    xpath: //${central_content-div}/${table-select}    billings
+    Select From List By Label    xpath: //${central_content-div}/${table-select}    ${empty_table-name}
     Element Should Not Be Visible    xpath://${db-table}
     Element Should Be Visible    xpath://${central_content-div}/p[text()="${no-data_warning}[en]"]
     select_other_language    'fi'
@@ -94,5 +95,6 @@ with_no_data
 *** Keywords ***
 check_text-elements
     [Arguments]    ${language}
+    [Documentation]    This test checks the title and the select-dropdown-menu texts in the database page. It takes language as an argument.
     Element Text Should Be    xpath: //${central_content-div}/${database-title}[locator]    ${database-title}[${language}]
     Element Text Should Be    xpath: //${central_content-div}/${table-select}/option[1]    ${table-select-text}[${language}]
