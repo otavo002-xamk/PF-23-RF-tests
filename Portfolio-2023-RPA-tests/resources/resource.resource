@@ -22,9 +22,6 @@ ${top-right-corner}    div[@class="float-right"]
 ${browser-opening}    full-width_opening
 &{database-title}    locator=h1    en=Database!    fi=Tietokanta!
 
-
-
-
 *** Keywords ***
 full-width_opening
     [Documentation]    opens the browser and maximizes the browser window in full-screen width
