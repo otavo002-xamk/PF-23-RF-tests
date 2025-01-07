@@ -14,6 +14,7 @@ ${empty_table-name}    empty_table
 ${non-empty_table-name}    customers
 
 
+
 *** Test Cases ***
 dbtables&texts
     [Documentation]    This test will open the database page by clicking it in the menu. It then checks the text-elements and the options in table-select-dropdown-menu. The test compares the select-dropdown-menu-options to the values in the json file.
@@ -44,7 +45,7 @@ table_items
     Click Link    link: ${navbar-links}[data_base][en]
     Element Should Not Be Visible    xpath://${db-table}
     Select From List By Label    xpath: //${central_content-div}/${table-select}    ${non-empty_table-name}
-    Element Should Be Visible    xpath://${central_content-div}/${db-table}
+    Wait Until Element Is Visible    xpath://${central_content-div}/${db-table}
     ${table-content_json}=    Load Json From File    ${CURDIR}${/}jsonfiles/table-content.json
     ${table-item}=    Get Value From Json    ${table-content_json}    [0]
     ${table-dict}=    Get From List    ${table-item}    0
@@ -62,6 +63,7 @@ table_items
             END
         END
     END
+
     [Teardown]    Close Browser
 
 with_no_connection
