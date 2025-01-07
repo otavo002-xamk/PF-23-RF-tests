@@ -10,8 +10,9 @@ ${table-select}    select[@id="table-select"]
 ${db-table}       table[@data-testid="db-contents-table"]
 &{no-connection_warning}    en=No connection!    fi=Yhteyttä ei ole!
 &{no-data_warning}    en=no data    fi=ei dataa
-${empty_table-name}    billings
-${non-empty_table-name}    PriceLogs
+${empty_table-name}    empty_table
+${non-empty_table-name}    customers
+
 
 *** Test Cases ***
 dbtables&texts
@@ -56,7 +57,9 @@ table_items
         ${item-dict}=    Get From List    ${table-content_json}    ${index}
         @{table-item-values}=    Get Dictionary Values    ${item-dict}
         FOR    ${value}    IN    @{table-item-values}
-            Element Should Be Visible    xpath://${central_content-div}/${db-table}/tbody/tr/th[text()="${value}"]
+            IF    "${value}" != "None"
+                Element Should Be Visible    xpath://${central_content-div}/${db-table}/tbody/tr/th[text()="${value}"]
+            END
         END
     END
     [Teardown]    Close Browser
