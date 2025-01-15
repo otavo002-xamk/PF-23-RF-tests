@@ -19,7 +19,7 @@ ${toggle-to-light}    img[@alt="sun"]
 ${header}         div[@class="p-2 bg-header bg-cover absolute w-full bg-red-600 h-40 shadow-header"]
 ${top-left-corner}    div[@class="float-left"]
 ${top-right-corner}    div[@class="float-right"]
-${browser-opening}    full-width_opening
+${browser-opening}    %{BROWSER_OPENING}
 &{database-title}    locator=h1    en=Database!    fi=Tietokanta!
 
 *** Keywords ***
