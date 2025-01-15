@@ -1,7 +1,7 @@
 FROM python:3
 
 # Install Robot Framework and SeleniumLibrary
-RUN pip install robotframework robotframework-seleniumlibrary
+RUN pip install robotframework robotframework-seleniumlibrary robotframework-jsonlibrary
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -27,5 +27,5 @@ COPY ./Portfolio-2023-RPA-tests /app
 # Start Xvfb and run tests with headless Firefox
 CMD Xvfb :99 -screen 0 1920x1080x24 & \
     sleep 3 && \
-    robot --variable BROWSER:headlessfirefox Slideshow.robot && \
+    robot --variable BROWSER:headlessfirefox Database.robot Math_Game.robot NASA_API.robot Slideshow.robot static_parts.robot && \
     pkill Xvfb

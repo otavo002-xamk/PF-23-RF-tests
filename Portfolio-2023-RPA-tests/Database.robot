@@ -102,4 +102,5 @@ check_text-elements
     [Arguments]    ${language}
     [Documentation]    This test checks the title and the select-dropdown-menu texts in the database page. It takes language as an argument.
     Element Text Should Be    xpath: //${central_content-div}/${database-title}[locator]    ${database-title}[${language}]
+    Wait Until Element Is Visible   xpath: //${central_content-div}/${table-select}/option[1]
     Element Text Should Be    xpath: //${central_content-div}/${table-select}/option[1]    ${table-select-text}[${language}]
