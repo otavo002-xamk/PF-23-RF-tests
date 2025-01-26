@@ -1,4 +1,4 @@
-﻿Robot Framework tests for Portfolio 2023. Run Robot Framework tests with full-sized window by setting the ${browser-opening} -variable to value full-width_opening (default). Run with small-sized window by setting it to small-width_opening. Before running the tests ensure the Portfolio 2023 project is up and running.
+﻿Robot Framework tests for Portfolio 2023. To run the tests with small-sized window set the %{BROWSER_OPENING} environment variable to 'small-width_opening'. By default this variable is set to full width. Before running the tests ensure the Portfolio 2023 project is up and running.
 
 Before running the Database suite (excluding with_no_connection test case) ensure:
 	1. the Portfolio-Server project is up and running and it has the database-connection set up.
@@ -37,6 +37,8 @@ Before running the Database suite (excluding with_no_connection test case) ensur
 		  },
 		  ...
 		]
+
+By default the %{HOST} variable is set to 'http://localhost:3000'. Change this if your host url is different.
 
 Copyright 2023 Tapani Voutilainen
 

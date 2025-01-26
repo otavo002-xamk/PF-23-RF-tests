@@ -12,20 +12,21 @@ ${central_content-div}    div[@class="p-12 lg:p-0"]
 &{math-game-link}    en=Math Game    fi=Matikkapeli    path=MathGame
 &{nasa-api-link}    en=NASA API    fi=NASA API    path=nasaAPI
 &{database-link}    en=Database    fi=Tietokanta    path=dataBase
-&{links-link}    en=Links    fi=Linkit    path=links
+&{links-link}     en=Links    fi=Linkit    path=links
 &{navbar-links}    math_game=${math-game-link}    nasa_api=${nasa-api-link}    data_base=${database-link}    links=${links-link}
 ${toggle-to-dark}    img[@alt="moon"]
 ${toggle-to-light}    img[@alt="sun"]
 ${header}         div[@class="p-2 bg-header bg-cover absolute w-full bg-red-600 h-40 shadow-header"]
 ${top-left-corner}    div[@class="float-left"]
 ${top-right-corner}    div[@class="float-right"]
-${browser-opening}    %{BROWSER_OPENING}
+${browser-opening}    %{BROWSER_OPENING=full-width_opening}
 &{database-title}    locator=h1    en=Database!    fi=Tietokanta!
+
 
 *** Keywords ***
 full-width_opening
     [Documentation]    opens the browser and maximizes the browser window in full-screen width
-    Open Browser    %{HOST}    firefox
+    Open Browser    %{HOST=http://localhost:3000}    firefox
     Maximize Browser Window
 
 select_other_language
@@ -40,7 +41,7 @@ select_other_language
 
 small-width_opening
     [Documentation]    opens the browser, then shrinks the browser width so that the responsive layout changes, then opens the navbar-menu
-    Open Browser    %{HOST}    firefox
+    Open Browser    %{HOST=http://localhost:3000}    firefox
     Set Window Size    1023    952
     Set Window Position    0    0
     Click Element    xpath: //div[@data-testid="menu-container"]
