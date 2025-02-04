@@ -1,2 +1,4 @@
 venv/
 Portfolio-2023-RPA-tests/jsonfiles/
+.env
+/logs

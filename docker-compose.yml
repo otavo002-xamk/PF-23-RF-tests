@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  tests:
+    #Comment the following line if you uncomment the next line
+    image: woudisnakes/portfolio-2023-tests:latest
+    #Uncomment the following line to build the image from the Dockerfile
+    #build: .
+    volumes:
+      - ./:/app/tests
+      - ./logs:/app/logs
+    env_file: .env
+    environment:
+      - BROWSER=headlessfirefox
+      - HOST=http://host.docker.internal:3000
+      - BROWSER_OPENING=${BROWSER_OPENING}
+    command: >
+      sh -c "while ! curl -s http://host.docker.internal:3000 > /dev/null; do sleep 1; done &&
+             rm -f /tmp/.X99-lock &&
+             Xvfb :99 -screen 0 1920x1080x24 &
+             sleep 10 && 
+             robot --outputdir /app/logs Database.robot Math_Game.robot NASA_API.robot Slideshow.robot static_parts.robot && 
+             pkill Xvfb"
