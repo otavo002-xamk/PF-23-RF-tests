@@ -10,8 +10,8 @@ ${table-select}    select[@id="table-select"]
 ${db-table}       table[@data-testid="db-contents-table"]
 &{no-connection_warning}    en=No connection!    fi=Yhteyttä ei ole!
 &{no-data_warning}    en=no data    fi=ei dataa
-${empty_table-name}    empty_table
-${non-empty_table-name}    customers
+${empty_table-name}    %{EMPTY_TABLE=empty_table}
+${non-empty_table-name}    %{FILLED_TABLE=customers}
 
 
 

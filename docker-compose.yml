@@ -14,6 +14,8 @@ services:
       - BROWSER=headlessfirefox
       - HOST=http://host.docker.internal:3000
       - BROWSER_OPENING=${BROWSER_OPENING}
+      - EMPTY_TABLE=${EMPTY_TABLE}
+      - FILLED_TABLE=${FILLED_TABLE}
     command: >
       sh -c "while ! curl -s http://host.docker.internal:3000 > /dev/null; do sleep 1; done &&
              rm -f /tmp/.X99-lock &&
