@@ -31,7 +31,7 @@ calculate_sum
     ${random2}=    Get Text    xpath: //div[@data-testid="random-number-${equation-number}-1"]
     ${random3}=    Get Text    xpath: //div[@data-testid="random-number-${equation-number}-2"]
     ${sum}    evaluate    ${random1}+${random2}+${random3}
-    [Return]    ${sum}
+    RETURN    ${sum}
 
 check_start-page-elements
     [Arguments]    ${language}
@@ -121,7 +121,7 @@ click_correct
     [Documentation]    The keyword takes an equation-number as argument and then calculates sum of the random numbers and clicks the correct option from the options table.
     ${sum}    calculate_sum    ${equation-number}
     Click Element    xpath: //${options-table-${equation-number}}//td[text()="${sum}"]
-    [Return]    ${sum}
+    RETURN    ${sum}
 
 check_all_result-texts
     [Arguments]    ${language}

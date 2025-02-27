@@ -9,7 +9,7 @@ homepage-button
     frontpage_opening
     ${navbar_is_not_visible?}=    Run Keyword And Return Status    Element Should Not Be Visible    link: ${navbar-links}[data_base][en]
     IF    ${navbar_is_not_visible?}
-        Click Element    xpath: //div[@data-testid="menu-container"]
+        Click Element    xpath: //button[@data-testid="menu-container"]
     END
     Click Link    link: ${navbar-links}[data_base][en]
     Element Text Should Be    xpath: //${central_content-div}/${database-title}[locator]    ${database-title}[en]
@@ -55,11 +55,11 @@ navbar
     Click Element    xpath: //${header}/${top-left-corner}//${logo}
     Set Window Size    1023    952
     check_closed_menu-items
-    Click Element    xpath: //div[@data-testid="menu-container"]
+    Click Element    xpath: //button[@data-testid="menu-container"]
     check_menu_items    en
-    Click Element    xpath: //div[@data-testid="menu-container"]
+    Click Element    xpath: //button[@data-testid="menu-container"]
     check_closed_menu-items
-    Click Element    xpath: //div[@data-testid="menu-container"]
+    Click Element    xpath: //button[@data-testid="menu-container"]
     check_menu_items    en
     Click Element    xpath: //${header}/${top-left-corner}//${logo}
     check_closed_menu-items

@@ -44,4 +44,4 @@ small-width_opening
     Open Browser    %{HOST=http://localhost:3000}    firefox
     Set Window Size    1023    952
     Set Window Position    0    0
-    Click Element    xpath: //div[@data-testid="menu-container"]
+    Click Element    xpath: //button[@data-testid="menu-container"]

@@ -1,22 +1,26 @@
-FROM python:3
+FROM python:3 AS base-image
 
-# Install Robot Framework and SeleniumLibrary
-RUN pip install robotframework robotframework-seleniumlibrary robotframework-jsonlibrary
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    libpango1.0-0 \
-    xdg-utils \
-    wget \
-    xvfb \
+RUN pip install \
+    robotframework \
+    robotframework-jsonlibrary \
+    robotframework-seleniumlibrary && \
+    apt-get update && apt-get install -y \
+    libasound2 \
     libgtk-3-0 \
-    libasound2
+    libpango1.0-0 \
+    wget \
+    xdg-utils \
+    xvfb && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
-# Install geckodriver
-RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.35.0/geckodriver-v0.35.0-linux64.tar.gz \
-    && tar -xvzf geckodriver-v0.35.0-linux64.tar.gz \
+FROM base-image AS geckodriver-image
+
+RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz \
+    && tar -xvzf geckodriver-v0.36.0-linux64.tar.gz \
     && mv geckodriver /usr/local/bin/ \
-    && rm geckodriver-v0.35.0-linux64.tar.gz
+    && rm geckodriver-v0.36.0-linux64.tar.gz
+
+FROM geckodriver-image
 
 # Set environment variables for headless Firefox
 ENV DISPLAY=:99
@@ -25,6 +29,7 @@ WORKDIR /app
 COPY ./Portfolio-2023-RPA-tests /app
 
 # Start Xvfb and run tests with headless Firefox
+SHELL ["/bin/bash", "-c"]
 CMD Xvfb :99 -screen 0 1920x1080x24 & \
     sleep 3 && \
     robot --variable BROWSER:headlessfirefox Database.robot Math_Game.robot NASA_API.robot Slideshow.robot static_parts.robot && \
