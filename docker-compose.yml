@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   tests:
@@ -9,6 +9,7 @@ services:
     volumes:
       - ./:/app/tests
       - ./logs:/app/logs
+      - ./Portfolio-2023-RPA-tests/jsonfiles:/app/jsonfiles
     env_file: .env
     environment:
       - BROWSER=headlessfirefox
@@ -21,5 +22,5 @@ services:
              rm -f /tmp/.X99-lock &&
              Xvfb :99 -screen 0 1920x1080x24 &
              sleep 10 && 
-             robot --outputdir /app/logs Database.robot Math_Game.robot NASA_API.robot Slideshow.robot static_parts.robot && 
+             robot --outputdir /app/logs --exclude with_no_connection Database.robot Math_Game.robot NASA_API.robot Slideshow.robot static_parts.robot && 
              pkill Xvfb"
