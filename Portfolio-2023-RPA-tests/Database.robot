@@ -68,6 +68,7 @@ table_items
 
 with_no_connection
     [Documentation]    This test checks all the text elements in the database page when the database connection is off. The back-end Portfolio-Server or the MySQL database has to be shut off before running this test.
+    [Tags]    with_no_connection
     [Setup]    ${browser-opening}
     Click Link    link: ${navbar-links}[data_base][en]
     Element Should Not Be Visible    xpath://${db-table}

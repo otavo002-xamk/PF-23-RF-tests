@@ -22,6 +22,8 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckod
 
 FROM geckodriver-image
 
+RUN apt-get update && apt-get install -y mariadb-client && rm -rf /var/lib/apt/lists/*
+
 # Set environment variables for headless Firefox
 ENV DISPLAY=:99
 
@@ -32,5 +34,5 @@ COPY ./Portfolio-2023-RPA-tests /app
 SHELL ["/bin/bash", "-c"]
 CMD Xvfb :99 -screen 0 1920x1080x24 & \
     sleep 3 && \
-    robot --variable BROWSER:headlessfirefox Database.robot Math_Game.robot NASA_API.robot Slideshow.robot static_parts.robot && \
-    pkill Xvfb
+    robot --variable BROWSER:headlessfirefox Database.robot Math_Game.robot NASA_API.robot Slideshow.robot static_parts.robot \
+    --exclude with_no_connection && pkill Xvfb
