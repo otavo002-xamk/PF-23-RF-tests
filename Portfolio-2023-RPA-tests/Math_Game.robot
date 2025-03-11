@@ -37,12 +37,12 @@ checking_components
     END
     check_correct-count    ${sum_1}    1
     check_result_&_click_next    ${incorrect}    1
-    check_elements_after_start    2
-    Sleep    0.4
-    FOR    ${i}    IN RANGE    ${8}
-        Element Text Should Be    xpath: //${central_content-div}/${equation-div-2}/${status}[locator]    Time left: ${8 - ${i}}
-        Sleep    1
+    FOR    ${i}    IN RANGE    0    10
+        Wait Until Element Contains    xpath: //${central_content-div}/${equation-div-2}/${status}[locator]    Time left: ${10 - ${i}}
     END
+    check_equation-elements    2
+    Wait Until Page Does Not Contain    "Time left:"
+    sleep    1
     check_result_&_click_next    ${time_ended}    2
     check_elements_after_start    3
     ${sum_3}=    click_correct    3
