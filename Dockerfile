@@ -30,6 +30,9 @@ ENV DISPLAY=:99
 WORKDIR /app
 COPY ./Portfolio-2023-RPA-tests /app
 
+RUN useradd -m appuser
+USER appuser
+
 # Start Xvfb and run tests with headless Firefox
 SHELL ["/bin/bash", "-c"]
 CMD Xvfb :99 -screen 0 1920x1080x24 & \
