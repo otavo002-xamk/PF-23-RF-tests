@@ -5,7 +5,7 @@ Resource          resources/resource.resource
 *** Variables ***
 ${nasa-api-title}    NASA API!
 ${sol-input}      id:sol-input
-&{sol-input-label}    locator=input[@id="sol-input"]/preceding::label[@for="sol-input"]    en=Insert sol please (a value between 0 - 3495):    fi=Syötä sol kiitos (luku väliltä 0 - 3495):
+&{sol-input-label}    locator=input[@id="sol-input"]/preceding::label[@for="sol-input"]    en=Insert sol please (a value between 0 - 4099):    fi=Syötä sol kiitos (luku väliltä 0 - 4099):
 ${camera-select}    select[@id="camera-select"]
 &{camera-select-label}    locator=select[@id="camera-select"]/preceding::label[@for="camera-select"]    en=Select camera please:    fi=Valitse kamera kiitos:
 &{get-images-button}    locator=button[text()="Get images from NASA." or text()="Hae kuvat NASAlta."]    en=Get images from NASA.    fi=Hae kuvat NASAlta.
@@ -43,7 +43,7 @@ invalid_sol
     [Documentation]    checks the error-message when too large value is inserted to the sol-input
     [Setup]    ${browser-opening}
     Click Link    ${nasa-api-link}[en]
-    Input Text    ${sol-input}    3496
+    Input Text    ${sol-input}    4100
     Element Should Not Be Visible    ${get-images-button}[locator]//following-sibling::p
     Click Button    xpath: //${central_content-div}/${get-images-button}[locator]
     Element Text Should Be    xpath: //${central_content-div}/${get-images-button}[locator]/following-sibling::p    ${too_big_number}[en]

@@ -28,7 +28,6 @@ RUN apt-get update && apt-get install -y mariadb-client && rm -rf /var/lib/apt/l
 ENV DISPLAY=:99
 
 WORKDIR /app
-COPY ./Portfolio-2023-RPA-tests /app
 
 RUN useradd -m appuser
 USER appuser
