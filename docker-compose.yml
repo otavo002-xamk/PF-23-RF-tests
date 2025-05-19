@@ -7,7 +7,7 @@ services:
     #Uncomment the following line to build the image from the Dockerfile
     #build: .
     volumes:
-      - ./:/app/tests
+      - ./Portfolio-2023-RPA-tests:/app
       - ./logs:/app/logs
       - ./Portfolio-2023-RPA-tests/jsonfiles:/app/jsonfiles
     env_file: .env
