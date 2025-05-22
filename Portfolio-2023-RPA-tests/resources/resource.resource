@@ -5,7 +5,7 @@ Library           SeleniumLibrary
 ${logo}           img[@alt="home"]
 ${english-flag}    img[@alt="en"]
 ${finnish-flag}    img[@alt="fi"]
-${dropdown-icon}    class:css-tj5bde-Svg    # language-toggler's dropdown-icon
+${dropdown-icon}    xpath: //${header}/${top-right-corner}//div[@data-testid="select-dropdown"]    # language-toggler's dropdown-icon
 ${eng-flag-dropdown-item}    img[@data-testid="english-flag"]
 ${fin-flag-dropdown-item}    img[@data-testid="finnish-flag"]
 ${central_content-div}    div[@class="p-12 lg:p-0"]
