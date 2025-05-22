@@ -26,7 +26,7 @@ ${browser-opening}    %{BROWSER_OPENING=full-width_opening}
 *** Keywords ***
 full-width_opening
     [Documentation]    opens the browser and maximizes the browser window in full-screen width
-    Open Browser    %{HOST=http://localhost:3000}    firefox
+    Open Browser    %{HOST=http://localhost:80}    firefox
     Maximize Browser Window
 
 select_other_language
@@ -41,7 +41,7 @@ select_other_language
 
 small-width_opening
     [Documentation]    opens the browser, then shrinks the browser width so that the responsive layout changes, then opens the navbar-menu
-    Open Browser    %{HOST=http://localhost:3000}    firefox
+    Open Browser    %{HOST=http://localhost:80}    firefox
     Set Window Size    1023    952
     Set Window Position    0    0
     Click Element    xpath: //button[@data-testid="menu-container"]
