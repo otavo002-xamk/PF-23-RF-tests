@@ -7,7 +7,7 @@ RUN pip install \
     apt-get update && apt-get install -y \
     libasound2 \
     libgtk-3-0 \
-    libpango1.0-0 \
+    libpango-1.0-0 \
     wget \
     xdg-utils \
     xvfb && \
