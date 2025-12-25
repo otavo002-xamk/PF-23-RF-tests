@@ -9,7 +9,7 @@ ${sol-input}      id:sol-input
 ${camera-select}    select[@id="camera-select"]
 &{camera-select-label}    locator=select[@id="camera-select"]/preceding::label[@for="camera-select"]    en=Select camera please:    fi=Valitse kamera kiitos:
 &{get-images-button}    locator=button[text()="Get images from NASA." or text()="Hae kuvat NASAlta."]    en=Get images from NASA.    fi=Hae kuvat NASAlta.
-@{camera-option-texts}    Front Hazard Avoidance Camera    Rear Hazard Avoidance Camera    Mast Camera    Chemistry and Camera Complex    Mars Hand Lens Imager    Mars Descent Imager    Navigation Camera    Panoramic Camera    Miniature Thermal Emission Spectrometer (Mini-TES)
+@{camera-option-texts}    Front Hazard Avoidance Camera    Rear Hazard Avoidance Camera    Mast Camera    Chemistry and Camera Complex    Mars Hand Lens Imager    Mars Descent Imager    Navigation Camera
 ${nasa-api-loader}    div[@data-testid="nasa-api-loader"]
 &{no_pictures_found}    en=No pictures found. Try again with a different sol or different camera.    fi=Valitettavasti kuvia ei löytynyt. Kokeile toista solia tai toista kameraa.
 &{too_big_number}    en=Too big number!    fi=Liian suuri luku!
@@ -24,7 +24,8 @@ checking_components
     Element Should Not Be Visible    xpath: //${central_content-div}
     Click Link    link: ${navbar-links}[nasa_api][en]
     Element Attribute Value Should Be    ${sol-input}    placeholder    122
-    FOR    ${i}    IN RANGE    9
+    Input Text    ${sol-input}    1
+    FOR    ${i}    IN RANGE    7
         Element Text Should Be    xpath: //${central_content-div}/${camera-select}/option[${i+1}]    ${camera-option-texts}[${i}]
     END
     Element Should Not Be Visible    xpath: //${nasa-api-loader}
@@ -83,14 +84,18 @@ camera-trials
     [Documentation]    checks that selecting different camera options work as expected
     [Setup]    ${browser-opening}
     Click Link    ${nasa-api-link}[en]
-    Input Text    ${sol-input}    0
-    test_camera    3    2
     Input Text    ${sol-input}    1
-    test_camera    2    4
-    test_camera    4    8
+    test_camera    2    2
+    test_camera    4    3
     test_camera    6    4
+    Input Text    ${sol-input}    10
+    test_camera    3    20
+    Input Text    ${sol-input}    14
+    test_camera    0    4
+    Input Text    ${sol-input}    15
+    test_camera    1    8
     Input Text    ${sol-input}    21
-    test_camera    5    7
+    test_camera    5    3
     [Teardown]    Close Browser
 
 *** Keywords ***
